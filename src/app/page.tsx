@@ -144,14 +144,6 @@ export default async function HomePage() {
         </div>
 
         <AnimatedProductGrid initialProducts={trendingProducts as ProductType[]} />
-
-        {/* End of Collection Badge */}
-        <div className="mt-8 text-center">
-          <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold px-4 py-2 rounded-full shadow-xs">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-            <span>You&apos;ve explored all toys in this collection! 🦖</span>
-          </div>
-        </div>
       </section>
 
       {/* Footer */}

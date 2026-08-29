@@ -179,11 +179,6 @@ export default function AnimatedProductGrid({
               Loading More Joyful Toys...
             </span>
           </div>
-        ) : !hasMore && products.length > 0 ? (
-          <div className="inline-flex items-center gap-2 bg-slate-100/90 text-slate-600 text-xs font-bold px-5 py-2.5 rounded-full border border-slate-200/80 animate-in fade-in">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>You&apos;ve explored all {products.length} toys in this collection! ✨</span>
-          </div>
         ) : null}
       </div>
     </div>
