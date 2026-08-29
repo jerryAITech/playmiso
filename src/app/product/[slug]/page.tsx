@@ -127,7 +127,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     },
     offers: {
       '@type': 'Offer',
-      url: `https://playmiso.com/product/${product.slug}`,
+      url: `https://playmiso.vercel.app/product/${product.slug}`,
       priceCurrency: 'INR',
       price: product.price,
       priceValidUntil: '2028-12-31',

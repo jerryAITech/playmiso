@@ -6,6 +6,13 @@ import Footer from '@/components/Footer';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { defaultCategories } from '@/lib/default-data';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Toy Categories & Collections | Educational, Plushies, RC Cars',
+  description: 'Browse PlayMiso toy collections by category: STEM educational toys, soft plushies, remote control cars, puzzles, and arts & crafts.',
+};
+
 export const revalidate = 0;
 
 export default async function CategoriesPage() {

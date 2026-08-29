@@ -84,6 +84,7 @@ export default function LiveSearchBar({
         <input
           type="text"
           value={query}
+          aria-label="Search toys by name, category, or age"
           onFocus={() => {
             if (results.length > 0) setIsOpen(true);
           }}
@@ -95,13 +96,14 @@ export default function LiveSearchBar({
         />
 
         <Search
-          className={`text-slate-400 absolute top-1/2 -translate-y-1/2 ${
+          className={`text-slate-400 absolute top-1/2 -translate-y-1/2 pointer-events-none ${
             isMobile ? 'left-3 w-4 h-4' : 'left-4 w-4 h-4'
           }`}
+          aria-hidden="true"
         />
 
         <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
-          {loading && <Loader2 className="w-3.5 h-3.5 animate-spin text-toy-orange mr-1" />}
+          {loading && <Loader2 className="w-3.5 h-3.5 animate-spin text-toy-orange mr-1" aria-hidden="true" />}
 
           {query && (
             <button
@@ -112,6 +114,7 @@ export default function LiveSearchBar({
                 setIsOpen(false);
               }}
               className="p-1 text-slate-400 hover:text-slate-700 rounded-full"
+              aria-label="Clear search input"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -119,7 +122,8 @@ export default function LiveSearchBar({
 
           <button
             type="submit"
-            className="bg-toy-orange hover:bg-toy-orange/90 text-white font-semibold text-xs px-3.5 py-1.5 rounded-full transition-colors tap-bounce"
+            className="bg-toy-orange hover:bg-orange-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-full transition-colors tap-bounce cursor-pointer"
+            aria-label="Search catalog"
           >
             Search
           </button>

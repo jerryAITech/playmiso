@@ -9,6 +9,13 @@ import { Filter, SlidersHorizontal, ArrowLeft } from 'lucide-react';
 import { CategoryType, ProductType } from '@/types';
 import { defaultCategories, defaultProducts } from '@/lib/default-data';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'All Toys Catalog | Shop Safe STEM Kits, Plushies & RC Cars',
+  description: 'Explore the complete PlayMiso toy collection. Non-toxic, BPA-free STEM educational kits, plushies, action figures, puzzles, and RC cars with Cash on Delivery across India.',
+};
+
 export const revalidate = 0;
 
 interface ShopPageProps {

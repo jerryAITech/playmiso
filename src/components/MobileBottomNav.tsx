@@ -72,6 +72,7 @@ export default function MobileBottomNav() {
         {/* 1. Home Tab */}
         <Link
           href="/"
+          aria-label="Home"
           className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl tap-bounce transition-all relative ${
             isHome ? 'text-toy-orange font-black scale-105' : 'text-slate-500 hover:text-slate-900'
           }`}
@@ -88,6 +89,7 @@ export default function MobileBottomNav() {
         {/* 2. Explore / Categories Tab */}
         <Link
           href="/shop"
+          aria-label="Explore Toys"
           className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl tap-bounce transition-all relative ${
             isExplore ? 'text-toy-orange font-black scale-105' : 'text-slate-500 hover:text-slate-900'
           }`}
@@ -104,6 +106,7 @@ export default function MobileBottomNav() {
         {/* 3. Shopping Bag Tab (Navigates directly to /cart) */}
         <Link
           href="/cart"
+          aria-label={`Shopping Bag (${totalItems} items)`}
           className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl tap-bounce transition-all relative ${
             isBag ? 'text-toy-orange font-black scale-105' : 'text-slate-500 hover:text-slate-900'
           }`}
@@ -127,6 +130,7 @@ export default function MobileBottomNav() {
         {/* 4. Wishlist Tab */}
         <Link
           href="/wishlist"
+          aria-label={`Wishlist (${wishlist.length} items)`}
           className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl tap-bounce transition-all relative ${
             isWishlist ? 'text-toy-pink font-black scale-105' : 'text-slate-500 hover:text-slate-900'
           }`}
@@ -148,6 +152,7 @@ export default function MobileBottomNav() {
         {/* 5. Profile / Account Tab */}
         <Link
           href={user ? '/profile' : '/login'}
+          aria-label={user ? 'User Profile' : 'Sign In'}
           className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl tap-bounce transition-all relative ${
             isProfile ? 'text-toy-orange font-black scale-105' : 'text-slate-500 hover:text-slate-900'
           }`}

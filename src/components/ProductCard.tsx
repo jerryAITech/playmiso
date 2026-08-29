@@ -53,7 +53,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         type="button"
         onClick={handleWishlist}
         className="absolute top-2.5 right-2.5 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-slate-400 hover:text-toy-pink shadow-md tap-bounce transition-all hover:scale-110 cursor-pointer"
-        aria-label="Add to wishlist"
+        aria-label={isFav ? `Remove ${product.title} from wishlist` : `Add ${product.title} to wishlist`}
       >
         <Heart
           className={`w-4 h-4 transition-transform duration-300 ${
@@ -63,7 +63,11 @@ export default function ProductCard({ product }: ProductCardProps) {
       </button>
 
       {/* Product Image Container */}
-      <Link href={`/product/${product.slug}`} className="relative aspect-square w-full overflow-hidden bg-slate-50 block">
+      <Link
+        href={`/product/${product.slug}`}
+        aria-label={`View details for ${product.title}`}
+        className="relative aspect-square w-full overflow-hidden bg-slate-50 block"
+      >
         <Image
           src={mainImage}
           alt={product.title}
