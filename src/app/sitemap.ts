@@ -1,27 +1,36 @@
 import { MetadataRoute } from 'next';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://playmiso.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://playmiso.vercel.app';
 
-  const [products, categories] = await Promise.all([
-    prisma.product.findMany({ select: { slug: true, updatedAt: true } }),
-    prisma.category.findMany({ select: { slug: true, updatedAt: true } }),
-  ]);
+  let productUrls: MetadataRoute.Sitemap = [];
+  let categoryUrls: MetadataRoute.Sitemap = [];
 
-  const productUrls = products.map((prod) => ({
-    url: `${baseUrl}/product/${prod.slug}`,
-    lastModified: prod.updatedAt,
-    changeFrequency: 'daily' as const,
-    priority: 0.9,
-  }));
+  try {
+    const [products, categories] = await Promise.all([
+      prisma.product.findMany({ select: { slug: true, updatedAt: true } }),
+      prisma.category.findMany({ select: { slug: true, updatedAt: true } }),
+    ]);
 
-  const categoryUrls = categories.map((cat) => ({
-    url: `${baseUrl}/category/${cat.slug}`,
-    lastModified: cat.updatedAt,
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }));
+    productUrls = products.map((prod) => ({
+      url: `${baseUrl}/product/${prod.slug}`,
+      lastModified: prod.updatedAt,
+      changeFrequency: 'daily' as const,
+      priority: 0.9,
+    }));
+
+    categoryUrls = categories.map((cat) => ({
+      url: `${baseUrl}/category/${cat.slug}`,
+      lastModified: cat.updatedAt,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }));
+  } catch (e) {
+    console.warn('Sitemap build fallback: database unreachable during SSG build phase', e);
+  }
 
   return [
     {
