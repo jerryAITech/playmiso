@@ -1,6 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
+
+const defaultTheme = {
+  id: 'global',
+  fontFamily: 'Plus Jakarta Sans',
+  primaryColor: '#FF7844',
+  secondaryColor: '#2EC4B6',
+  buttonStyle: 'bouncy-3d',
+  borderRadius: 'rounded-3xl',
+  festiveMode: 'NONE',
+  festiveBadgeText: 'Festive Mega Toy Sale • Up to 50% OFF',
+  festiveLogoEmoji: '🪔',
+  festiveLogoUrl: null,
+  festiveBannerActive: true,
+  festiveRibbonBg: 'from-amber-600 via-rose-600 to-purple-600',
+};
 
 // GET active store theme and festive campaign settings
 export async function GET() {
@@ -10,27 +24,19 @@ export async function GET() {
     });
 
     if (!theme) {
-      theme = await prisma.storeTheme.create({
-        data: {
-          id: 'global',
-          fontFamily: 'Plus Jakarta Sans',
-          primaryColor: '#FF7844',
-          secondaryColor: '#2EC4B6',
-          buttonStyle: 'bouncy-3d',
-          borderRadius: 'rounded-3xl',
-          festiveMode: 'NONE',
-          festiveBadgeText: 'Festive Mega Toy Sale • Up to 50% OFF',
-          festiveLogoEmoji: '🪔',
-          festiveBannerActive: true,
-          festiveRibbonBg: 'from-amber-600 via-rose-600 to-purple-600',
-        },
-      });
+      try {
+        theme = await prisma.storeTheme.create({
+          data: defaultTheme,
+        });
+      } catch {
+        theme = defaultTheme as any;
+      }
     }
 
-    return NextResponse.json(theme);
+    return NextResponse.json(theme || defaultTheme);
   } catch (error) {
-    console.error('Error fetching theme:', error);
-    return NextResponse.json({ error: 'Failed to fetch store theme' }, { status: 500 });
+    console.error('Error fetching theme, returning default:', error);
+    return NextResponse.json(defaultTheme);
   }
 }
 
