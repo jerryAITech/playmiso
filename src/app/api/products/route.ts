@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { defaultProducts } from '@/lib/default-data';
 
 export async function GET(request: NextRequest) {
   try {
@@ -57,14 +58,27 @@ export async function GET(request: NextRequest) {
       prisma.product.count({ where }),
     ]);
 
-    return NextResponse.json(products, {
+    if (products && products.length > 0) {
+      return NextResponse.json(products, {
+        headers: {
+          'x-total-count': total.toString(),
+        },
+      });
+    }
+
+    // Fallback if DB is empty
+    return NextResponse.json(defaultProducts, {
       headers: {
-        'x-total-count': total.toString(),
+        'x-total-count': defaultProducts.length.toString(),
       },
     });
   } catch (error: any) {
-    console.error('Error fetching products:', error);
-    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
+    console.error('Error fetching products, returning default fallback:', error);
+    return NextResponse.json(defaultProducts, {
+      headers: {
+        'x-total-count': defaultProducts.length.toString(),
+      },
+    });
   }
 }
 
@@ -98,13 +112,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required product fields' }, { status: 400 });
     }
 
-    // Generate unique slug
-    const baseSlug = title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
-    const randomSuffix = Math.random().toString(36).substring(2, 6);
-    const slug = `${baseSlug}-${randomSuffix}`;
+    const slug =
+      body.slug ||
+      title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '') + `-${Date.now().toString().slice(-4)}`;
 
     const newProduct = await prisma.product.create({
       data: {

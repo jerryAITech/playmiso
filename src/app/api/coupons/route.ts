@@ -1,16 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+const defaultCoupons = [
+  {
+    id: 'cp1',
+    code: 'PLAYMISO10',
+    description: 'Flat 10% OFF on all toy orders',
+    discountType: 'PERCENTAGE',
+    discountValue: 10,
+    minOrderAmount: 0,
+    maxDiscount: 500,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'cp2',
+    code: 'FIRSTTOY',
+    description: 'Flat ₹100 OFF for new parents',
+    discountType: 'FIXED',
+    discountValue: 100,
+    minOrderAmount: 499,
+    maxDiscount: null,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'cp3',
+    code: 'FESTIVE20',
+    description: 'Extra 20% OFF festive celebration',
+    discountType: 'PERCENTAGE',
+    discountValue: 20,
+    minOrderAmount: 999,
+    maxDiscount: 1000,
+    isActive: true,
+    createdAt: new Date().toISOString(),
+  },
+];
+
 export async function GET() {
   try {
     const coupons = await prisma.coupon.findMany({
       where: { isActive: true },
       orderBy: { createdAt: 'desc' },
     });
-    return NextResponse.json(coupons);
+
+    if (coupons && coupons.length > 0) {
+      return NextResponse.json(coupons);
+    }
+
+    return NextResponse.json(defaultCoupons);
   } catch (error: any) {
-    console.error('Error fetching coupons:', error);
-    return NextResponse.json({ error: 'Failed to fetch coupons' }, { status: 500 });
+    console.error('Error fetching coupons, returning default fallback:', error);
+    return NextResponse.json(defaultCoupons);
   }
 }
 

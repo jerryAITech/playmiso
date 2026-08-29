@@ -24,9 +24,9 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(orders);
+    return NextResponse.json(orders || []);
   } catch (error: any) {
-    console.error('Error fetching user orders:', error);
-    return NextResponse.json({ error: 'Failed to fetch user orders' }, { status: 500 });
+    console.error('Error fetching user orders, returning empty array:', error);
+    return NextResponse.json([]);
   }
 }

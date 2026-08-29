@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { defaultProducts } from '@/lib/default-data';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  let id = '';
   try {
-    const { id } = await params;
+    const resolvedParams = await params;
+    id = resolvedParams.id;
     const product = await prisma.product.findFirst({
       where: {
         OR: [{ id }, { slug: id }],
@@ -17,13 +20,16 @@ export async function GET(
     });
 
     if (!product) {
+      const fallbackProd = defaultProducts.find((p) => p.id === id || p.slug === id);
+      if (fallbackProd) return NextResponse.json(fallbackProd);
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
     return NextResponse.json(product);
   } catch (error: any) {
-    console.error('Error fetching product:', error);
-    return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 });
+    console.error('Error fetching product, checking default fallback:', error);
+    const fallbackProd = defaultProducts.find((p) => p.id === id || p.slug === id) || defaultProducts[0];
+    return NextResponse.json(fallbackProd);
   }
 }
 

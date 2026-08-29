@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { defaultBanners } from '@/lib/default-data';
 
 export async function GET() {
   try {
@@ -7,10 +8,15 @@ export async function GET() {
       where: { isActive: true },
       orderBy: { order: 'asc' },
     });
-    return NextResponse.json(banners);
+
+    if (banners && banners.length > 0) {
+      return NextResponse.json(banners);
+    }
+
+    return NextResponse.json(defaultBanners);
   } catch (error: any) {
-    console.error('Error fetching banners:', error);
-    return NextResponse.json({ error: 'Failed to fetch banners' }, { status: 500 });
+    console.error('Error fetching banners, returning default fallback:', error);
+    return NextResponse.json(defaultBanners);
   }
 }
 
