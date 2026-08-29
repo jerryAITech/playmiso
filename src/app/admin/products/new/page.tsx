@@ -37,7 +37,7 @@ export default function AddNewToyPage() {
     categoryId: '',
     ageGroup: '3-5 Years',
     stock: '20',
-    brand: 'ToyJoy',
+    brand: 'PlayMiso',
     safetyInfo: '100% Non-Toxic, BPA Free, Safe child-friendly edges',
     isFeatured: true,
     isTrending: false,
@@ -85,7 +85,7 @@ export default function AddNewToyPage() {
     const selectedCat = categories.find((c) => c.id === formData.categoryId)?.name || 'Toys';
     const firstImage = formData.images.split(/[\n,]+/)[0]?.trim() || '';
 
-    const generatedTitle = `Buy ${formData.title} Online in India | ToyJoy COD`;
+    const generatedTitle = `Buy ${formData.title} Online in India | PlayMiso COD`;
     const generatedDesc = `Shop ${formData.title} at best price ₹${formData.price || '999'}. ${selectedCat} for kids (${formData.ageGroup}). 100% Kid-Safe, Cash On Delivery & Fast Shipping across India.`;
     const generatedKeywords = `${formData.title.toLowerCase()}, buy ${formData.title.toLowerCase()}, ${selectedCat.toLowerCase()}, toys for ${formData.ageGroup.toLowerCase()}, cod toys`;
 
@@ -375,7 +375,7 @@ export default function AddNewToyPage() {
                 type="text"
                 value={formData.brand}
                 onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                placeholder="ToyJoy"
+                placeholder="PlayMiso"
                 className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-toy-orange"
               />
             </div>
@@ -467,7 +467,7 @@ export default function AddNewToyPage() {
                   type="text"
                   value={formData.metaTitle}
                   onChange={(e) => setFormData({ ...formData, metaTitle: e.target.value })}
-                  placeholder="e.g. Buy 4WD Monster Stunt RC Car Online India | ToyJoy COD"
+                  placeholder="e.g. Buy 4WD Monster Stunt RC Car Online India | PlayMiso COD"
                   className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-toy-orange"
                 />
               </div>
@@ -521,12 +521,12 @@ export default function AddNewToyPage() {
                     🧸
                   </div>
                   <div className="text-[11px] text-slate-600 truncate">
-                    https://toyjoy.in <span className="text-slate-400">› product › toy-preview</span>
+                    https://playmiso.com <span className="text-slate-400">› product › toy-preview</span>
                   </div>
                 </div>
 
                 <h4 className="text-sm font-semibold text-blue-800 line-clamp-1 hover:underline cursor-pointer">
-                  {formData.metaTitle || formData.title || 'Product Title | ToyJoy India'}
+                  {formData.metaTitle || formData.title || 'Product Title | PlayMiso India'}
                 </h4>
 
                 <p className="text-xs text-slate-600 line-clamp-2 leading-snug">

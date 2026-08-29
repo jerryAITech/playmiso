@@ -11,6 +11,18 @@ export interface CategoryType {
   };
 }
 
+export interface ReviewType {
+  id: string;
+  productId: string;
+  userName: string;
+  rating: number;
+  title?: string | null;
+  comment: string;
+  isVerified: boolean;
+  createdAt: string | Date;
+  updatedAt?: string | Date;
+}
+
 export interface ProductType {
   id: string;
   title: string;
@@ -38,6 +50,7 @@ export interface ProductType {
   canonicalUrl?: string | null;
   ogImage?: string | null;
   createdAt: string | Date;
+  reviews?: ReviewType[];
 }
 
 export interface CartItem {

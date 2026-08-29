@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   });
 
   if (!product) {
-    return { title: 'Product Not Found | ToyJoy' };
+    return { title: 'Product Not Found | PlayMiso' };
   }
 
   let images: string[] = [];
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
   const title =
     product.metaTitle ||
-    `${product.title} | Buy Online at ₹${product.price} (Cash on Delivery) | ToyJoy`;
+    `${product.title} | Buy Online at ₹${product.price} (Cash on Delivery) | PlayMiso`;
 
   const description =
     product.metaDescription ||

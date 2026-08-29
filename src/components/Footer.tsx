@@ -112,7 +112,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-toy-orange shrink-0" />
-                <span>support@toyjoy.in</span>
+                <span>support@playmiso.in</span>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-toy-pink shrink-0 mt-0.5" />
@@ -134,7 +134,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-3 text-center sm:text-left">
-          <p>© {new Date().getFullYear()} ToyJoy India Pvt Ltd. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} PlayMiso India Pvt Ltd. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span className="hover:text-white cursor-pointer">Privacy Policy</span>
             <span className="hover:text-white cursor-pointer">Terms of Service</span>

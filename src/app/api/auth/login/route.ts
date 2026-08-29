@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       message: 'Login successful!',
     });
 
-    response.cookies.set('toyjoy_auth_token', token, {
+    response.cookies.set('playmiso_auth_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

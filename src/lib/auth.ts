@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { prisma } from './prisma';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'toyjoy_super_secret_jwt_key_2026_kid_safe';
+const JWT_SECRET = process.env.JWT_SECRET || 'playmiso_super_secret_jwt_key_2026_kid_safe';
 
 export interface TokenPayload {
   userId: string;
@@ -26,7 +26,9 @@ export function verifyToken(token: string): TokenPayload | null {
 export async function getCurrentUser() {
   try {
     const cookieStore = await cookies();
-    const token = cookieStore.get('toyjoy_auth_token')?.value;
+    const token =
+      cookieStore.get('playmiso_auth_token')?.value ||
+      cookieStore.get('toyjoy_auth_token')?.value;
     if (!token) return null;
 
     const payload = verifyToken(token);

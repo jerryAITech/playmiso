@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     const response = NextResponse.json({ user, message: 'Account created successfully!' }, { status: 201 });
 
-    response.cookies.set('toyjoy_auth_token', token, {
+    response.cookies.set('playmiso_auth_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

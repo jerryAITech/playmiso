@@ -185,7 +185,7 @@ export default function AdminSeoPortalPage() {
                   required
                   value={seoData.siteTitle}
                   onChange={(e) => setSeoData({ ...seoData, siteTitle: e.target.value })}
-                  placeholder="ToyJoy | India’s Favorite Online Toy Store"
+                  placeholder="PlayMiso | Discover the Magic of Play (Cash On Delivery)"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-toy-orange"
                 />
               </div>
@@ -217,7 +217,7 @@ export default function AdminSeoPortalPage() {
                   type="text"
                   value={seoData.keywords}
                   onChange={(e) => setSeoData({ ...seoData, keywords: e.target.value })}
-                  placeholder="toys online india, buy toys online, stem toys, soft toys"
+                  placeholder="playmiso, toys online india, buy toys online, stem toys, soft toys"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-toy-orange"
                 />
               </div>
@@ -265,11 +265,11 @@ export default function AdminSeoPortalPage() {
                   🧸
                 </div>
                 <div className="text-[11px] text-slate-600 truncate">
-                  https://toyjoy.in <span className="text-slate-400">› shop</span>
+                  https://playmiso.com <span className="text-slate-400">› shop</span>
                 </div>
               </div>
               <h4 className="text-sm font-semibold text-blue-800 line-clamp-1 hover:underline cursor-pointer">
-                {seoData.siteTitle || 'ToyJoy | India’s Favorite Online Toy Store'}
+                {seoData.siteTitle || 'PlayMiso | Discover the Magic of Play'}
               </h4>
               <p className="text-xs text-slate-600 line-clamp-2 leading-snug">
                 {seoData.metaDescription || 'Shop safe, educational, STEM kits, cuddly plushies, RC cars with Cash on Delivery.'}
@@ -291,7 +291,7 @@ export default function AdminSeoPortalPage() {
                 </div>
               )}
               <div className="p-3.5 bg-white space-y-1 border-t border-slate-100">
-                <span className="text-[10px] text-slate-400 uppercase font-mono">toyjoy.in</span>
+                <span className="text-[10px] text-slate-400 uppercase font-mono">playmiso.com</span>
                 <h4 className="text-xs font-bold text-slate-900 line-clamp-1">{seoData.siteTitle}</h4>
                 <p className="text-[11px] text-slate-500 line-clamp-2 leading-tight">
                   {seoData.metaDescription}

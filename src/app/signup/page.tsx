@@ -47,7 +47,7 @@ function SignupForm() {
     setLoading(false);
 
     if (res.success) {
-      showToast('🎉 Account created! Welcome to ToyJoy family.', 'success');
+      showToast('🎉 Account created! Welcome to PlayMiso family.', 'success');
       router.push(redirectUrl);
     } else {
       setError(res.error || 'Failed to create account');

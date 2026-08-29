@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
         isFeatured: Boolean(isFeatured),
         isTrending: Boolean(isTrending),
         isBestseller: Boolean(isBestseller),
-        brand: brand || 'ToyJoy',
+        brand: brand || 'PlayMiso',
         safetyInfo: safetyInfo || '100% Non-Toxic, Safe for Kids',
         metaTitle: metaTitle || null,
         metaDescription: metaDescription || null,

@@ -40,7 +40,7 @@ export default function AdminProductsPage() {
     categoryId: '',
     ageGroup: '3-5 Years',
     stock: '15',
-    brand: 'ToyJoy',
+    brand: 'PlayMiso',
     safetyInfo: '100% Non-Toxic, BPA Free, Safe for Kids',
     isFeatured: true,
     isTrending: false,
@@ -91,7 +91,7 @@ export default function AdminProductsPage() {
       categoryId: p.categoryId,
       ageGroup: p.ageGroup,
       stock: p.stock.toString(),
-      brand: p.brand || 'ToyJoy',
+      brand: p.brand || 'PlayMiso',
       safetyInfo: p.safetyInfo || '100% Non-Toxic, BPA Free, Safe for Kids',
       isFeatured: p.isFeatured,
       isTrending: p.isTrending,
@@ -265,7 +265,7 @@ export default function AdminProductsPage() {
                           </div>
                           <div className="min-w-0 max-w-xs">
                             <h4 className="font-bold text-slate-900 truncate">{product.title}</h4>
-                            <span className="text-[11px] text-slate-400">{product.brand || 'ToyJoy'}</span>
+                            <span className="text-[11px] text-slate-400">{product.brand || 'PlayMiso'}</span>
                           </div>
                         </div>
                       </td>

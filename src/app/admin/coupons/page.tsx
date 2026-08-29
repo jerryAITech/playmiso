@@ -180,7 +180,7 @@ export default function AdminCouponsPage() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. TOYJOY20"
+                  placeholder="e.g. PLAYMISO20"
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900 font-mono uppercase focus:outline-none focus:ring-2 focus:ring-toy-orange"

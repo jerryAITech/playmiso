@@ -73,7 +73,7 @@ export async function PUT(
         isFeatured: Boolean(isFeatured),
         isTrending: Boolean(isTrending),
         isBestseller: Boolean(isBestseller),
-        brand: brand || 'ToyJoy',
+        brand: brand || 'PlayMiso',
         safetyInfo: safetyInfo || '100% Non-Toxic, Safe for Kids',
         metaTitle: metaTitle !== undefined ? metaTitle : undefined,
         metaDescription: metaDescription !== undefined ? metaDescription : undefined,
