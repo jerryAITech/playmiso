@@ -9,6 +9,8 @@ import SubNavbar from '@/components/SubNavbar';
 import MobileBottomNav from '@/components/MobileBottomNav';
 import CartDrawer from '@/components/CartDrawer';
 import Toast from '@/components/Toast';
+import SmoothScroll from '@/components/SmoothScroll';
+import JsonLdSchema from '@/components/JsonLdSchema';
 import InteractiveScreenCar from '@/components/InteractiveScreenCar';
 import FloatingParticles from '@/components/FloatingParticles';
 import FestiveBackgroundVectors from '@/components/FestiveBackgroundVectors';
@@ -100,7 +102,9 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <CartProvider>
+              <JsonLdSchema />
               <Toast />
+              <SmoothScroll />
               <FloatingParticles />
               <FestiveBackgroundVectors />
               <Header />
