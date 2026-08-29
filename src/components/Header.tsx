@@ -105,18 +105,18 @@ export default function Header() {
               )}
             </Link>
 
-            {/* Cart Trigger Badge */}
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="relative flex items-center gap-2 bg-toy-yellow hover:bg-toy-yellow/90 text-slate-950 font-bold px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full shadow-toy-sm transition-all tap-bounce"
-              aria-label="Shopping Cart"
+            {/* Cart Full View Trigger Badge */}
+            <Link
+              href="/cart"
+              className="relative flex items-center gap-2 bg-toy-yellow hover:bg-toy-yellow/90 text-slate-950 font-bold px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full shadow-toy-sm transition-all tap-bounce cursor-pointer"
+              aria-label="Shopping Cart Full View"
             >
               <ShoppingBag className="w-5 h-5 text-slate-900" />
               <span className="hidden sm:inline text-sm">Bag</span>
               <span className="w-5 h-5 bg-slate-900 text-white text-xs font-black rounded-full flex items-center justify-center shadow-inner">
                 {totalItems}
               </span>
-            </button>
+            </Link>
           </div>
         </div>
 

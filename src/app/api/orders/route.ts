@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
       couponDiscount,
       shippingFee,
       totalAmount,
+      paymentMethod = 'COD',
     } = body;
 
     if (!customerName || !phone || !address || !items || !Array.isArray(items) || items.length === 0) {
@@ -76,12 +77,51 @@ export async function POST(request: NextRequest) {
 
     const orderNumber = `TOY-${Math.floor(100000 + Math.random() * 900000)}`;
 
-    // Create Order with nested items in a transaction
+    // Create Order with nested items in a safe transaction
     const createdOrder = await prisma.$transaction(async (tx) => {
+      // 1. Verify if user actually exists in the database to prevent foreign key violation
+      let validUserId: string | null = null;
+      if (user?.id) {
+        try {
+          const userExists = await tx.user.findUnique({
+            where: { id: user.id },
+            select: { id: true },
+          });
+          if (userExists) validUserId = userExists.id;
+        } catch {
+          validUserId = null;
+        }
+      }
+
+      // 2. Verify each product ID to avoid foreign key violation on OrderItem.productId
+      const itemDataPromises = items.map(async (item: any) => {
+        let validProductId: string | null = null;
+        if (item.id) {
+          try {
+            const prodExists = await tx.product.findUnique({
+              where: { id: item.id },
+              select: { id: true },
+            });
+            if (prodExists) validProductId = prodExists.id;
+          } catch {
+            validProductId = null;
+          }
+        }
+        return {
+          productId: validProductId,
+          title: item.title,
+          price: parseFloat(item.price),
+          quantity: parseInt(item.quantity) || 1,
+          image: item.image || null,
+        };
+      });
+
+      const safeItems = await Promise.all(itemDataPromises);
+
       const order = await tx.order.create({
         data: {
           orderNumber,
-          userId: user.id,
+          userId: validUserId,
           customerName: customerName || user.name,
           email: email || user.email,
           phone,
@@ -89,22 +129,16 @@ export async function POST(request: NextRequest) {
           city: city || 'Local',
           state: state || 'State',
           postalCode: postalCode || '000000',
-          paymentMethod: 'COD',
+          paymentMethod: paymentMethod === 'RAZORPAY' ? 'RAZORPAY' : 'COD',
           subtotal: parseFloat(subtotal),
           couponCode: couponCode || null,
           couponDiscount: parseFloat(couponDiscount || 0),
           shippingFee: parseFloat(shippingFee || 0),
           totalAmount: parseFloat(totalAmount),
-          status: 'PENDING',
+          status: paymentMethod === 'RAZORPAY' ? 'PROCESSING' : 'PENDING',
           notes: notes || null,
           items: {
-            create: items.map((item: any) => ({
-              productId: item.id || null,
-              title: item.title,
-              price: parseFloat(item.price),
-              quantity: parseInt(item.quantity) || 1,
-              image: item.image || null,
-            })),
+            create: safeItems,
           },
         },
         include: {
@@ -124,7 +158,7 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // Reduce product stock
+      // Reduce product stock safely
       for (const item of items) {
         if (item.id) {
           try {
@@ -137,7 +171,7 @@ export async function POST(request: NextRequest) {
               },
             });
           } catch {
-            // Non-blocking if product was deleted
+            // Non-blocking if product ID was synthetic/fallback
           }
         }
       }

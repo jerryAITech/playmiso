@@ -238,8 +238,8 @@ export default function CartPage() {
             ))}
           </div>
 
-          {/* Right Column: Coupons & Order Summary (5 Cols) */}
-          <div className="lg:col-span-5 space-y-6">
+          {/* Right Column: Coupons & Order Summary (5 Cols - Fixed/Sticky) */}
+          <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
             
             {/* 🏷️ PROMINENT PROMO & COUPON CENTER */}
             <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-4">
