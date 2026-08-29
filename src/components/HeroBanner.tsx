@@ -217,49 +217,6 @@ export default function HeroBanner({ initialBanners }: HeroBannerProps) {
           <AnimatedToyCar />
         </div>
 
-        {/* 4 Feature Value Pillars */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 mt-4">
-          <div className="bg-white p-3 sm:p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-xs sm:text-sm font-bold text-slate-800">100% Kid Safe</h4>
-              <p className="text-[10px] sm:text-xs text-slate-500">Non-Toxic & BPA Free</p>
-            </div>
-          </div>
-
-          <div className="bg-white p-3 sm:p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-50 text-toy-orange flex items-center justify-center shrink-0">
-              <Truck className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-xs sm:text-sm font-bold text-slate-800">Cash On Delivery</h4>
-              <p className="text-[10px] sm:text-xs text-slate-500">Pay when it arrives</p>
-            </div>
-          </div>
-
-          <div className="bg-white p-3 sm:p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 text-toy-blue flex items-center justify-center shrink-0">
-              <RotateCcw className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-xs sm:text-sm font-bold text-slate-800">Easy 7-Day Return</h4>
-              <p className="text-[10px] sm:text-xs text-slate-500">Hassle-free replacement</p>
-            </div>
-          </div>
-
-          <div className="bg-white p-3 sm:p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-purple-50 text-toy-purple flex items-center justify-center shrink-0">
-              <Award className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-xs sm:text-sm font-bold text-slate-800">Top Brand Quality</h4>
-              <p className="text-[10px] sm:text-xs text-slate-500">Tested by Indian parents</p>
-            </div>
-          </div>
-        </div>
-
       </div>
     </section>
   );
