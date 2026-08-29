@@ -12,6 +12,7 @@ model User {
   name      String
   email     String    @unique
   password  String
+  pin       String?   // 4-digit fast login PIN
   phone     String?
   role      String    @default("USER") // USER, ADMIN
   addresses Address[]

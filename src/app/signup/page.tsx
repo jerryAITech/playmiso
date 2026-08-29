@@ -19,6 +19,7 @@ function SignupForm() {
     email: '',
     phone: '',
     password: '',
+    pin: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -43,7 +44,7 @@ function SignupForm() {
     setLoading(true);
     setError('');
 
-    const res = await signup(formData.name, formData.email, formData.password, formData.phone);
+    const res = await signup(formData.name, formData.email, formData.password, formData.phone, formData.pin);
     setLoading(false);
 
     if (res.success) {
@@ -147,6 +148,26 @@ function SignupForm() {
               />
               <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-bold text-slate-700">
+                4-Digit Quick Login PIN (Optional)
+              </label>
+              <span className="text-[10px] font-bold text-toy-orange bg-orange-50 px-2 py-0.5 rounded-full">
+                ⚡ Fast 1-Tap Login
+              </span>
+            </div>
+            <input
+              type="password"
+              maxLength={4}
+              name="pin"
+              value={formData.pin}
+              onChange={handleChange}
+              placeholder="e.g. 1234"
+              className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 px-4 text-xs font-mono tracking-widest text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-toy-orange"
+            />
           </div>
 
           <button

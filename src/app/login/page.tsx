@@ -5,38 +5,53 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { useCart } from '@/lib/cart-context';
-import { Mail, Lock, Loader2, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { Mail, Lock, Loader2, ArrowRight, ShieldCheck, KeyRound, Phone, Sparkles } from 'lucide-react';
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get('redirect') || '/profile';
-  const { login } = useAuth();
+  const { login, loginWithPin } = useAuth();
   const { showToast } = useCart();
 
+  const [loginMode, setLoginMode] = useState<'pin' | 'password'>('pin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [pin, setPin] = useState('');
+  const [emailOrPhone, setEmailOrPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError('Please fill in all fields');
-      return;
-    }
-
     setLoading(true);
     setError('');
 
-    const res = await login(email, password);
+    let res: { success: boolean; error?: string };
+
+    if (loginMode === 'pin') {
+      if (!pin) {
+        setError('Please enter your 4-digit PIN');
+        setLoading(false);
+        return;
+      }
+      res = await loginWithPin(pin, emailOrPhone);
+    } else {
+      if (!email || !password) {
+        setError('Please fill in email and password');
+        setLoading(false);
+        return;
+      }
+      res = await login(email, password);
+    }
+
     setLoading(false);
 
     if (res.success) {
       showToast('🎉 Welcome back! Logged in successfully.', 'success');
       router.push(redirectUrl);
     } else {
-      setError(res.error || 'Invalid credentials');
+      setError(res.error || 'Invalid login credentials');
     }
   };
 
@@ -54,9 +69,44 @@ function LoginForm() {
           </h1>
           <p className="text-xs text-slate-500">
             {redirectUrl === '/checkout'
-              ? 'Please sign in to your account to complete your Cash on Delivery order.'
+              ? 'Please sign in to complete your Cash on Delivery order.'
               : 'Discover the Magic of Play • Sign in for orders and saved addresses.'}
           </p>
+        </div>
+
+        {/* Login Mode Toggle Tabs */}
+        <div className="grid grid-cols-2 p-1 bg-slate-100 rounded-2xl text-xs font-bold">
+          <button
+            type="button"
+            onClick={() => {
+              setLoginMode('pin');
+              setError('');
+            }}
+            className={`py-2 rounded-xl flex items-center justify-center gap-1.5 transition-all ${
+              loginMode === 'pin'
+                ? 'bg-white text-toy-orange shadow-xs font-black'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <KeyRound className="w-3.5 h-3.5" />
+            <span>⚡ 1-Tap PIN Login</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setLoginMode('password');
+              setError('');
+            }}
+            className={`py-2 rounded-xl flex items-center justify-center gap-1.5 transition-all ${
+              loginMode === 'password'
+                ? 'bg-white text-toy-orange shadow-xs font-black'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Lock className="w-3.5 h-3.5" />
+            <span>Password Login</span>
+          </button>
         </div>
 
         {/* Notice for Checkout */}
@@ -74,39 +124,81 @@ function LoginForm() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
-              Email Address
-            </label>
-            <div className="relative">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="e.g. rahul@example.com"
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 pl-10 pr-4 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-toy-orange"
-              />
-              <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            </div>
-          </div>
+          {loginMode === 'pin' ? (
+            <>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Phone Number or Email (Optional for Master Admin)
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={emailOrPhone}
+                    onChange={(e) => setEmailOrPhone(e.target.value)}
+                    placeholder="e.g. 9876543210 or parent@playmiso.com"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 pl-10 pr-4 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-toy-orange"
+                  />
+                  <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                </div>
+              </div>
 
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">
-              Password
-            </label>
-            <div className="relative">
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 pl-10 pr-4 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-toy-orange"
-              />
-              <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            </div>
-          </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-slate-700">
+                    Enter 4-Digit Quick PIN
+                  </label>
+                  <span className="text-[11px] text-slate-400 font-mono">Master PIN: 2026</span>
+                </div>
+                <div className="relative">
+                  <input
+                    type="password"
+                    required
+                    maxLength={6}
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value)}
+                    placeholder="• • • •"
+                    className="w-full bg-slate-50 border-2 border-slate-200 focus:border-toy-orange rounded-2xl py-3 text-center text-xl font-mono tracking-widest font-black text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-toy-orange"
+                  />
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="e.g. parent@playmiso.com"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 pl-10 pr-4 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-toy-orange"
+                  />
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 pl-10 pr-4 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-toy-orange"
+                  />
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                </div>
+              </div>
+            </>
+          )}
 
           <button
             type="submit"
@@ -116,11 +208,11 @@ function LoginForm() {
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Signing in...</span>
+                <span>Signing In...</span>
               </>
             ) : (
               <>
-                <span>Sign In & Continue</span>
+                <span>{loginMode === 'pin' ? 'Unlock with PIN' : 'Sign In'}</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
@@ -128,12 +220,12 @@ function LoginForm() {
         </form>
 
         <div className="text-center text-xs text-slate-500 pt-2 border-t border-slate-100">
-          <span>Don&apos;t have an account? </span>
+          <span>New to PlayMiso? </span>
           <Link
             href={`/signup${redirectUrl !== '/profile' ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}`}
             className="text-toy-orange font-bold hover:underline"
           >
-            Create Free Account
+            Create an Account
           </Link>
         </div>
 
@@ -144,7 +236,13 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-[60vh] flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-toy-orange" /></div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-[80vh] flex items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-toy-orange" />
+        </div>
+      }
+    >
       <LoginForm />
     </Suspense>
   );

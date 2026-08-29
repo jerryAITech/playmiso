@@ -6,7 +6,7 @@ import { signToken } from '@/lib/auth';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, password, phone } = body;
+    const { name, email, password, phone, pin } = body;
 
     if (!name || !email || !password) {
       return NextResponse.json({ error: 'Name, email, and password are required' }, { status: 400 });
@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
         email: cleanEmail,
         password: hashedPassword,
         phone: phone ? phone.trim() : null,
+        pin: pin ? pin.trim() : null,
         role: 'USER',
       },
       select: {

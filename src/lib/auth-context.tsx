@@ -28,9 +28,11 @@ interface AuthContextType {
   user: UserType | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  signup: (name: string, email: string, password: string, phone?: string) => Promise<{ success: boolean; error?: string }>;
+  loginWithPin: (pin: string, emailOrPhone?: string) => Promise<{ success: boolean; error?: string }>;
+  signup: (name: string, email: string, password: string, phone?: string, pin?: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  checkAuth: () => Promise<void>;
   addresses: AddressType[];
   addAddress: (addr: Omit<AddressType, 'id' | 'userId'>) => Promise<boolean>;
   deleteAddress: (id: string) => Promise<boolean>;
@@ -61,6 +63,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const checkAuth = refreshUser;
+
   useEffect(() => {
     refreshUser();
   }, []);
@@ -84,12 +88,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signup = async (name: string, email: string, password: string, phone?: string) => {
+  const loginWithPin = async (pin: string, emailOrPhone?: string) => {
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin, emailOrPhone }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        return { success: false, error: data.error || 'Incorrect PIN' };
+      }
+      setUser(data.user);
+      if (data.user.addresses) setAddresses(data.user.addresses);
+      return { success: true };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'PIN login error' };
+    }
+  };
+
+  const signup = async (name: string, email: string, password: string, phone?: string, pin?: string) => {
     try {
       const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password, phone }),
+        body: JSON.stringify({ name, email, password, phone, pin }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -170,9 +193,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         loading,
         login,
+        loginWithPin,
         signup,
         logout,
         refreshUser,
+        checkAuth,
         addresses,
         addAddress,
         deleteAddress,
