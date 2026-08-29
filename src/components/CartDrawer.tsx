@@ -60,25 +60,19 @@ export default function CartDrawer() {
             </button>
           </div>
 
-          {/* Free Shipping Progress Meter */}
-          <div className="px-4 py-3 bg-amber-50/60 border-b border-amber-100/70">
-            {amountToFreeShipping > 0 ? (
-              <div className="text-xs text-amber-900 font-medium">
-                Add <span className="font-bold text-toy-orange">₹{amountToFreeShipping}</span> more for{' '}
-                <span className="font-bold text-emerald-600">FREE Delivery</span>!
-              </div>
-            ) : (
-              <div className="text-xs text-emerald-700 font-bold flex items-center gap-1.5">
-                <Truck className="w-4 h-4 text-emerald-600" />
-                <span>🎉 Yay! You unlocked FREE Delivery across India!</span>
-              </div>
-            )}
-            <div className="w-full bg-amber-200/60 rounded-full h-1.5 mt-2 overflow-hidden">
-              <div
-                className="bg-gradient-to-r from-toy-yellow to-toy-green h-full rounded-full transition-all duration-500"
-                style={{ width: `${progressPercent}%` }}
-              />
+          {/* Delivery Indicator */}
+          <div className="px-4 py-2.5 bg-emerald-50/70 border-b border-emerald-100 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-1.5 text-emerald-800 font-bold">
+              <Truck className="w-4 h-4 text-emerald-600" />
+              <span>Free Delivery on All Orders</span>
             </div>
+            <Link
+              href="/cart"
+              onClick={() => setIsCartOpen(false)}
+              className="text-[11px] font-black text-toy-orange hover:underline"
+            >
+              Full Bag View &rarr;
+            </Link>
           </div>
 
           {/* Cart Items List */}
