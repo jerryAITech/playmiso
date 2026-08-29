@@ -5,6 +5,7 @@ import { AuthProvider } from '@/lib/auth-context';
 import { CartProvider } from '@/lib/cart-context';
 import { ThemeProvider } from '@/lib/theme-context';
 import Header from '@/components/Header';
+import SubNavbar from '@/components/SubNavbar';
 import MobileBottomNav from '@/components/MobileBottomNav';
 import CartDrawer from '@/components/CartDrawer';
 import Toast from '@/components/Toast';
@@ -103,6 +104,7 @@ export default function RootLayout({
               <FloatingParticles />
               <FestiveBackgroundVectors />
               <Header />
+              <SubNavbar />
               <InteractiveScreenCar />
               <CartDrawer />
               <main className="flex-1">{children}</main>

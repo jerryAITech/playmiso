@@ -12,9 +12,8 @@ export default function CategoryChips({ categories, selectedSlug }: CategoryChip
   return (
     <div className="w-full">
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 mb-3">
-        <h2 className="text-base sm:text-xl font-extrabold text-slate-900 flex items-center gap-2">
-          <span>Explore by Category</span>
-          <span className="text-sm font-normal text-slate-400">✨</span>
+        <h2 className="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
+          <span>Shop by Category</span>
         </h2>
         <Link
           href="/categories"

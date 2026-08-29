@@ -2,13 +2,14 @@ import React from 'react';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import HeroBanner from '@/components/HeroBanner';
+import TrustBar from '@/components/TrustBar';
 import CategoryChips from '@/components/CategoryChips';
 import AgeGroupFilter from '@/components/AgeGroupFilter';
 import ProductCard from '@/components/ProductCard';
 import AnimatedProductGrid from '@/components/AnimatedProductGrid';
 import ParentReviewsSlider from '@/components/ParentReviewsSlider';
 import Footer from '@/components/Footer';
-import { Sparkles, Flame, Trophy, ShieldCheck, ArrowRight, Truck } from 'lucide-react';
+import { Sparkles, Flame, Trophy, ShieldCheck, ArrowRight, Truck, ChevronRight } from 'lucide-react';
 import { CategoryType, ProductType } from '@/types';
 import { defaultBanners, defaultCategories, defaultProducts } from '@/lib/default-data';
 
@@ -64,6 +65,9 @@ export default async function HomePage() {
       {/* Hero Section with Dynamic Banners */}
       <HeroBanner initialBanners={banners} />
 
+      {/* Trust Highlights Bar (5 Benefit Pills) */}
+      <TrustBar />
+
       {/* Categories Horizontal Story Chips */}
       <section>
         <CategoryChips categories={categories as CategoryType[]} />
@@ -97,8 +101,8 @@ export default async function HomePage() {
             href="/shop?featured=true"
             className="text-xs sm:text-sm font-bold text-toy-orange hover:text-toy-orange/80 flex items-center gap-1 group tap-bounce"
           >
-            <span>View All</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            <span>View All Deals</span>
+            <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
 
@@ -134,12 +138,20 @@ export default async function HomePage() {
             href="/shop"
             className="text-xs sm:text-sm font-bold text-toy-orange hover:text-toy-orange/80 flex items-center gap-1 group tap-bounce"
           >
-            <span>Full Catalog</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            <span>View Full Catalog</span>
+            <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
 
         <AnimatedProductGrid initialProducts={trendingProducts as ProductType[]} />
+
+        {/* End of Collection Badge */}
+        <div className="mt-8 text-center">
+          <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold px-4 py-2 rounded-full shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+            <span>You&apos;ve explored all toys in this collection! 🦖</span>
+          </div>
+        </div>
       </section>
 
       {/* Footer */}

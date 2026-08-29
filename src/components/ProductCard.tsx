@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Star, Heart, Plus, ShoppingBag } from 'lucide-react';
+import { Star, Heart, Plus, Minus, ShoppingBag } from 'lucide-react';
 import { ProductType } from '@/types';
 import { useCart } from '@/lib/cart-context';
 
@@ -12,8 +12,9 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addToCart, toggleWishlist, isInWishlist } = useCart();
+  const { addToCart, updateQuantity, getItemQuantity, toggleWishlist, isInWishlist } = useCart();
   const isFav = isInWishlist(product.id);
+  const qtyInCart = getItemQuantity(product.id);
 
   // Parse images JSON or fallback
   let imageList: string[] = [];
@@ -73,7 +74,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Discount Badge */}
         {product.discount && product.discount > 0 ? (
-          <div className="absolute top-2.5 left-2.5 bg-gradient-to-r from-red-600 to-toy-red text-white text-[11px] sm:text-xs font-black px-2.5 py-0.5 rounded-xl shadow-md tracking-tight animate-pulse">
+          <div className="absolute top-2.5 left-2.5 bg-gradient-to-r from-red-600 to-toy-red text-white text-[10px] sm:text-[11px] font-black px-2 py-0.5 rounded-xl shadow-md tracking-tight animate-pulse">
             {product.discount}% OFF
           </div>
         ) : null}
@@ -85,7 +86,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </Link>
 
       {/* Product Info Section */}
-      <div className="p-3.5 sm:p-4 flex-1 flex flex-col justify-between">
+      <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between">
         <div>
           {/* Brand & Category */}
           <div className="flex items-center justify-between text-[11px] text-slate-400 font-medium mb-1">
@@ -121,14 +122,55 @@ export default function ProductCard({ product }: ProductCardProps) {
             <span className="text-[10px] font-bold text-emerald-600 block">COD Eligible</span>
           </div>
 
-          {/* Quick Add Button */}
-          <button
-            onClick={handleQuickAdd}
-            className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-toy-yellow hover:bg-toy-orange text-slate-950 hover:text-white flex items-center justify-center shadow-toy-sm tap-bounce hover:scale-105 transition-all"
-            aria-label={`Add ${product.title} to bag`}
-          >
-            <Plus className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
-          </button>
+          {/* Interactive Cart Button or Quantity Selector (+ / -) */}
+          {qtyInCart === 0 ? (
+            <button
+              onClick={handleQuickAdd}
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl bg-toy-yellow hover:bg-toy-orange text-slate-950 hover:text-white flex items-center justify-center shadow-toy-sm tap-bounce hover:scale-105 transition-all cursor-pointer"
+              aria-label={`Add ${product.title} to bag`}
+            >
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+            </button>
+          ) : (
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              className="flex items-center bg-slate-900 text-white rounded-2xl p-0.5 shadow-toy-sm"
+            >
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  updateQuantity(product.id, qtyInCart - 1);
+                }}
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center tap-bounce font-black text-xs transition-all cursor-pointer"
+                aria-label="Decrease quantity"
+              >
+                <Minus className="w-3.5 h-3.5 stroke-[3]" />
+              </button>
+
+              <span className="w-5 sm:w-6 text-center text-xs sm:text-sm font-black text-white font-mono">
+                {qtyInCart}
+              </span>
+
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  updateQuantity(product.id, qtyInCart + 1);
+                }}
+                disabled={qtyInCart >= (product.stock || 99)}
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-toy-orange hover:bg-toy-orange/90 text-white flex items-center justify-center tap-bounce font-black text-xs disabled:opacity-50 transition-all cursor-pointer"
+                aria-label="Increase quantity"
+              >
+                <Plus className="w-3.5 h-3.5 stroke-[3]" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -23,6 +23,7 @@ interface CartContextType {
   addToCart: (item: Omit<CartItem, 'quantity'>, qty?: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
+  getItemQuantity: (productId: string) => number;
   clearCart: () => void;
   toggleWishlist: (productId: string) => void;
   isInWishlist: (productId: string) => boolean;
@@ -58,13 +59,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Load from local storage
   useEffect(() => {
     try {
-      const savedCart = localStorage.getItem('toy_joy_cart');
+      const savedCart = localStorage.getItem('playmiso_cart') || localStorage.getItem('toy_joy_cart');
       if (savedCart) setCart(JSON.parse(savedCart));
 
-      const savedWishlist = localStorage.getItem('toy_joy_wishlist');
+      const savedWishlist = localStorage.getItem('playmiso_wishlist') || localStorage.getItem('toy_joy_wishlist');
       if (savedWishlist) setWishlist(JSON.parse(savedWishlist));
 
-      const savedCoupon = localStorage.getItem('toy_joy_coupon');
+      const savedCoupon = localStorage.getItem('playmiso_coupon') || localStorage.getItem('toy_joy_coupon');
       if (savedCoupon) setAppliedCoupon(JSON.parse(savedCoupon));
     } catch (e) {
       console.error('Failed to load cart/wishlist from localStorage', e);
@@ -76,7 +77,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!mounted) return;
     try {
-      localStorage.setItem('toy_joy_cart', JSON.stringify(cart));
+      localStorage.setItem('playmiso_cart', JSON.stringify(cart));
     } catch (e) {
       console.error('Failed to save cart', e);
     }
@@ -85,7 +86,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!mounted) return;
     try {
-      localStorage.setItem('toy_joy_wishlist', JSON.stringify(wishlist));
+      localStorage.setItem('playmiso_wishlist', JSON.stringify(wishlist));
     } catch (e) {
       console.error('Failed to save wishlist', e);
     }
@@ -95,9 +96,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (!mounted) return;
     try {
       if (appliedCoupon) {
-        localStorage.setItem('toy_joy_coupon', JSON.stringify(appliedCoupon));
+        localStorage.setItem('playmiso_coupon', JSON.stringify(appliedCoupon));
       } else {
-        localStorage.removeItem('toy_joy_coupon');
+        localStorage.removeItem('playmiso_coupon');
       }
     } catch (e) {
       console.error('Failed to save coupon', e);
@@ -149,6 +150,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
+  const getItemQuantity = (productId: string) => {
+    const item = cart.find((i) => i.id === productId);
+    return item ? item.quantity : 0;
+  };
+
   const clearCart = () => {
     setCart([]);
     setAppliedCoupon(null);
@@ -178,26 +184,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (!code.trim()) {
       return { success: false, message: 'Please enter a coupon code' };
     }
+
     try {
       const res = await fetch('/api/coupons/validate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: code.trim(), subtotal }),
+        body: JSON.stringify({ code, subtotal }),
       });
+
       const data = await res.json();
-      if (!res.ok) {
+      if (res.ok && data.valid) {
+        setAppliedCoupon({
+          code: data.coupon.code,
+          discountAmount: data.discountAmount,
+          description: data.coupon.description,
+        });
+        showToast(data.message, 'success');
+        return { success: true, message: data.message };
+      } else {
         return { success: false, message: data.error || 'Invalid coupon code' };
       }
-
-      setAppliedCoupon({
-        code: data.coupon.code,
-        discountAmount: data.discountAmount,
-        description: data.coupon.description,
-      });
-      showToast(data.message, 'success');
-      return { success: true, message: data.message };
-    } catch (err: any) {
-      return { success: false, message: err.message || 'Error validating coupon' };
+    } catch (e: any) {
+      return { success: false, message: 'Failed to validate coupon' };
     }
   };
 
@@ -206,10 +214,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     showToast('Coupon removed', 'info');
   };
 
-  const couponDiscount = appliedCoupon ? Math.min(appliedCoupon.discountAmount, subtotal) : 0;
-  const subtotalAfterCoupon = Math.max(0, subtotal - couponDiscount);
-  const shippingFee = subtotal === 0 || subtotalAfterCoupon >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING_FEE;
-  const totalAmount = Math.round((subtotalAfterCoupon + (subtotal === 0 ? 0 : shippingFee)) * 100) / 100;
+  // Re-verify coupon discount value against changing subtotal
+  const couponDiscount = appliedCoupon ? appliedCoupon.discountAmount : 0;
+
+  // Free shipping logic
+  const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD || cart.length === 0;
+  const shippingFee = isFreeShipping ? 0 : STANDARD_SHIPPING_FEE;
+
+  // Final Total calculation
+  const totalAmount = Math.max(0, subtotal - couponDiscount + shippingFee);
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
@@ -222,6 +235,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         addToCart,
         removeFromCart,
         updateQuantity,
+        getItemQuantity,
         clearCart,
         toggleWishlist,
         isInWishlist,
