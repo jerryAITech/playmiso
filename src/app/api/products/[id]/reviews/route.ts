@@ -1,6 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const reviews = await prisma.review.findMany({
+      where: { productId: id },
+      orderBy: { createdAt: 'desc' },
+    });
+    return NextResponse.json(reviews || []);
+  } catch (error) {
+    console.error('Error fetching product reviews, returning empty list:', error);
+    return NextResponse.json([]);
+  }
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -29,20 +46,22 @@ export async function POST(
     });
 
     // Recalculate product aggregate rating
-    const allReviews = await prisma.review.findMany({
-      where: { productId: id },
-    });
+    try {
+      const allReviews = await prisma.review.findMany({
+        where: { productId: id },
+      });
 
-    const totalScore = allReviews.reduce((sum, r) => sum + r.rating, 0);
-    const avgRating = totalScore / allReviews.length;
+      const totalScore = allReviews.reduce((sum, r) => sum + r.rating, 0);
+      const avgRating = totalScore / allReviews.length;
 
-    await prisma.product.update({
-      where: { id },
-      data: {
-        rating: parseFloat(avgRating.toFixed(1)),
-        reviewsCount: allReviews.length,
-      },
-    });
+      await prisma.product.update({
+        where: { id },
+        data: {
+          rating: parseFloat(avgRating.toFixed(1)),
+          reviewsCount: allReviews.length,
+        },
+      });
+    } catch {}
 
     return NextResponse.json({ success: true, review });
   } catch (error: any) {

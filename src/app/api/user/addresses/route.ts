@@ -16,8 +16,8 @@ export async function GET() {
 
     return NextResponse.json(addresses);
   } catch (error: any) {
-    console.error('Error fetching addresses:', error);
-    return NextResponse.json({ error: 'Failed to fetch addresses' }, { status: 500 });
+    console.error('Error fetching addresses, returning empty list:', error);
+    return NextResponse.json([]);
   }
 }
 

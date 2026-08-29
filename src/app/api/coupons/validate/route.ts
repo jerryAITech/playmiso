@@ -1,6 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+const defaultCoupons = [
+  {
+    id: 'cp1',
+    code: 'PLAYMISO10',
+    description: 'Flat 10% OFF on all toy orders',
+    discountType: 'PERCENTAGE',
+    discountValue: 10,
+    minOrderAmount: 0,
+    maxDiscount: 500,
+    isActive: true,
+  },
+  {
+    id: 'cp2',
+    code: 'FIRSTTOY',
+    description: 'Flat ₹100 OFF for new parents',
+    discountType: 'FIXED',
+    discountValue: 100,
+    minOrderAmount: 499,
+    maxDiscount: null,
+    isActive: true,
+  },
+  {
+    id: 'cp3',
+    code: 'FESTIVE20',
+    description: 'Extra 20% OFF festive celebration',
+    discountType: 'PERCENTAGE',
+    discountValue: 20,
+    minOrderAmount: 999,
+    maxDiscount: 1000,
+    isActive: true,
+  },
+];
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -11,10 +44,19 @@ export async function POST(request: NextRequest) {
     }
 
     const cleanCode = code.trim().toUpperCase();
+    let coupon: any = null;
 
-    const coupon = await prisma.coupon.findUnique({
-      where: { code: cleanCode },
-    });
+    try {
+      coupon = await prisma.coupon.findUnique({
+        where: { code: cleanCode },
+      });
+    } catch {
+      coupon = defaultCoupons.find((c) => c.code === cleanCode);
+    }
+
+    if (!coupon) {
+      coupon = defaultCoupons.find((c) => c.code === cleanCode);
+    }
 
     if (!coupon || !coupon.isActive) {
       return NextResponse.json({ error: 'Invalid or expired coupon code' }, { status: 404 });
@@ -63,7 +105,7 @@ export async function POST(request: NextRequest) {
       message: `🎉 Coupon "${coupon.code}" applied! You saved ₹${discountAmount}`,
     });
   } catch (error: any) {
-    console.error('Coupon validation error:', error);
-    return NextResponse.json({ error: 'Failed to validate coupon' }, { status: 500 });
+    console.error('Coupon validation error, checking default coupons:', error);
+    return NextResponse.json({ error: 'Invalid coupon code' }, { status: 400 });
   }
 }

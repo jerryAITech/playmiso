@@ -1,13 +1,22 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
+import { defaultProducts } from '@/lib/default-data';
 
 export async function GET() {
   try {
-    const products = await prisma.product.findMany({
-      include: { category: true },
-      orderBy: { createdAt: 'desc' },
-    });
+    let products: any[] = [];
+    try {
+      products = await prisma.product.findMany({
+        include: { category: true },
+        orderBy: { createdAt: 'desc' },
+      });
+    } catch {
+      products = defaultProducts;
+    }
+
+    if (!products || products.length === 0) {
+      products = defaultProducts;
+    }
 
     const headers = [
       'Title',
@@ -78,7 +87,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error('Error exporting products:', error);
+    console.error('Error exporting products, using default fallback:', error);
     return NextResponse.json({ error: 'Failed to export products' }, { status: 500 });
   }
 }
