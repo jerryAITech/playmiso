@@ -12,6 +12,7 @@ import Toast from '@/components/Toast';
 import SmoothScroll from '@/components/SmoothScroll';
 import JsonLdSchema from '@/components/JsonLdSchema';
 import InteractiveScreenCar from '@/components/InteractiveScreenCar';
+import ScrollToTopButton from '@/components/ScrollToTopButton';
 import FloatingParticles from '@/components/FloatingParticles';
 import FestiveBackgroundVectors from '@/components/FestiveBackgroundVectors';
 
@@ -109,6 +110,7 @@ export default function RootLayout({
               <SubNavbar />
               <InteractiveScreenCar />
               <CartDrawer />
+              <ScrollToTopButton />
               <main className="flex-1">{children}</main>
               <MobileBottomNav />
             </CartProvider>
