@@ -14,6 +14,7 @@ import {
   ArrowRight,
   ShieldCheck,
   ShoppingBag,
+  MessageCircle,
 } from 'lucide-react';
 
 export const revalidate = 0;
@@ -43,6 +44,28 @@ export default async function OrderSuccessPage({ params }: OrderSuccessProps) {
     day: 'numeric',
   });
 
+  const cleanCustomerPhone = order.phone.replace(/[^0-9]/g, '');
+  const itemsText = order.items.map((i) => `• ${i.title} (${i.quantity}x) - ₹${i.price * i.quantity}`).join('\n');
+
+  const customerWhatsappMessage = `🧸 *PlayMiso Toy Store - Order Confirmation* 🎉
+
+Hi ${order.customerName}! Thank you for shopping with PlayMiso.
+
+📋 *Order Details:*
+• Order ID: #${order.orderNumber}
+• Payment Mode: *Cash on Delivery (COD)*
+• Items:
+${itemsText}
+
+💰 *Total COD Amount:* ₹${order.totalAmount}
+
+📍 *Delivery Address:*
+${order.address}, ${order.city}, ${order.state} - ${order.postalCode}
+
+🚚 *Estimated Delivery:* ${formattedDeliveryDate} (Free Express Dispatch)
+
+💬 Reply to this message anytime for live dispatch tracking & customer support!`;
+
   return (
     <div className="min-h-screen bg-slate-50/60 pb-16">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-6">
@@ -68,6 +91,42 @@ export default async function OrderSuccessPage({ params }: OrderSuccessProps) {
           <div className="inline-flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-2xl text-xs font-bold text-slate-800">
             <span>Order ID:</span>
             <span className="font-mono text-toy-orange text-sm font-black">{order.orderNumber}</span>
+          </div>
+        </div>
+
+        {/* Instant WhatsApp Order Receipt Action Card (100% Free) */}
+        <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-green-50 border-2 border-emerald-300 rounded-4xl p-6 sm:p-8 text-center space-y-4 shadow-sm">
+          <div className="flex items-center justify-center gap-2 text-emerald-900 font-black text-base">
+            <span className="text-2xl">📱</span>
+            <span>Instant WhatsApp Order Receipt & Tracking</span>
+          </div>
+          <p className="text-xs sm:text-sm text-emerald-800 max-w-lg mx-auto leading-relaxed">
+            Get your official PlayMiso order invoice, delivery updates, and real-time courier tracking directly on WhatsApp!
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            {cleanCustomerPhone && (
+              <a
+                href={`https://wa.me/91${cleanCustomerPhone}?text=${encodeURIComponent(customerWhatsappMessage)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-black text-xs sm:text-sm py-3.5 px-6 rounded-2xl shadow-md tap-bounce transition-all"
+              >
+                <MessageCircle className="w-4 h-4 fill-current" />
+                <span>Save Receipt on My WhatsApp</span>
+              </a>
+            )}
+
+            <a
+              href={`https://wa.me/919876543210?text=${encodeURIComponent(
+                `Hi PlayMiso Support! 🎉 I just placed COD Order #${order.orderNumber} for ₹${order.totalAmount}. Please confirm my order dispatch to ${order.city}!`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm py-3.5 px-6 rounded-2xl shadow-sm tap-bounce transition-all"
+            >
+              <span>💬 Chat with PlayMiso Helpdesk</span>
+            </a>
           </div>
         </div>
 
@@ -115,37 +174,40 @@ export default async function OrderSuccessPage({ params }: OrderSuccessProps) {
           </div>
         </div>
 
-        {/* Delivery Details & Items */}
-        <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-5">
-          <h3 className="text-sm font-extrabold text-slate-900 border-b border-slate-100 pb-3">
-            Shipping Information
+        {/* Order Details Card */}
+        <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-4">
+          <h3 className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+            <ShoppingBag className="w-4 h-4 text-toy-orange" />
+            <span>Order Summary</span>
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div className="space-y-1">
-              <span className="text-slate-400 font-bold uppercase text-[10px]">Recipient</span>
-              <p className="font-bold text-slate-800">{order.customerName}</p>
-              <p className="text-slate-600 flex items-center gap-1.5 mt-1">
-                <Phone className="w-3.5 h-3.5 text-slate-400" />
-                <span>{order.phone}</span>
-              </p>
+          <div className="border-t border-b border-slate-100 py-3 space-y-3">
+            <div className="flex items-start gap-2 text-xs text-slate-600">
+              <MapPin className="w-4 h-4 text-toy-orange shrink-0 mt-0.5" />
+              <span>
+                <strong>Shipping Address:</strong> {order.address}, {order.city}, {order.state} -{' '}
+                {order.postalCode}
+              </span>
             </div>
-
-            <div className="space-y-1">
-              <span className="text-slate-400 font-bold uppercase text-[10px]">Delivery Address</span>
-              <p className="text-slate-700 leading-relaxed">
-                {order.address}, {order.city}, {order.state} - {order.postalCode}
-              </p>
+            <div className="flex items-center gap-2 text-xs text-slate-600">
+              <Phone className="w-4 h-4 text-toy-orange shrink-0" />
+              <span>
+                <strong>Contact Phone:</strong> {order.phone}
+              </span>
             </div>
           </div>
 
-          <div className="border-t border-slate-100 pt-4">
-            <span className="text-slate-400 font-bold uppercase text-[10px] block mb-3">
+          {/* Items List */}
+          <div className="space-y-3">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
               Ordered Toys ({order.items.length})
             </span>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {order.items.map((item) => (
-                <div key={item.id} className="flex items-center justify-between text-xs">
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between text-xs py-2 border-b border-slate-50 last:border-none"
+                >
                   <div className="flex items-center gap-3">
                     {item.image && (
                       <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200">
@@ -169,27 +231,6 @@ export default async function OrderSuccessPage({ params }: OrderSuccessProps) {
             <span className="font-extrabold text-slate-900">Total COD Amount:</span>
             <span className="text-xl font-black text-toy-orange">₹{order.totalAmount}</span>
           </div>
-        </div>
-
-        {/* WhatsApp Order Receipt Action */}
-        <div className="bg-emerald-50 border border-emerald-200 rounded-3xl p-5 sm:p-6 text-center space-y-3">
-          <div className="flex items-center justify-center gap-2 text-emerald-800 font-black text-sm">
-            <span className="text-xl">💬</span>
-            <span>Get Live Updates on WhatsApp</span>
-          </div>
-          <p className="text-xs text-emerald-700 max-w-md mx-auto">
-            Save your order receipt or chat directly with our PlayMiso Support team for express dispatch tracking!
-          </p>
-          <a
-            href={`https://wa.me/919876543210?text=${encodeURIComponent(
-              `Hi PlayMiso! 🎉 I just placed COD Order #${order.orderNumber} for ₹${order.totalAmount}. Please confirm my order dispatch to ${order.city}!`
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-black text-xs sm:text-sm py-3.5 px-8 rounded-2xl shadow-md tap-bounce transition-all"
-          >
-            <span>📱 Send Order Receipt to WhatsApp</span>
-          </a>
         </div>
 
         {/* Action Buttons */}

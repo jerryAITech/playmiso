@@ -15,6 +15,7 @@ import {
   MapPin,
   Calendar,
   Loader2,
+  MessageCircle,
 } from 'lucide-react';
 import { OrderType } from '@/types';
 
@@ -218,7 +219,20 @@ export default function AdminOrdersPage() {
                         </div>
                       </td>
 
-                      <td className="p-4 text-right">
+                      <td className="p-4 text-right space-x-1.5 whitespace-nowrap">
+                        <a
+                          href={`https://wa.me/91${order.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                            `Hi ${order.customerName}! 🧸 PlayMiso Toy Store update: Your COD Order #${order.orderNumber} (₹${order.totalAmount}) status is now: ${order.status}. Contact us here for delivery updates!`
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-1.5 rounded-xl border border-emerald-200 tap-bounce"
+                          title="Message Customer on WhatsApp"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5 fill-current" />
+                          <span>WhatsApp</span>
+                        </a>
+
                         <button
                           onClick={() => setSelectedOrder(order)}
                           className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-200 tap-bounce"
@@ -327,7 +341,19 @@ export default function AdminOrdersPage() {
               </span>
             </div>
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+            <div className="flex justify-between items-center gap-2 pt-2 border-t border-slate-100">
+              <a
+                href={`https://wa.me/91${selectedOrder.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                  `Hi ${selectedOrder.customerName}! 🧸 PlayMiso Toy Store update: Your COD Order #${selectedOrder.orderNumber} (₹${selectedOrder.totalAmount}) status is: ${selectedOrder.status}. Thank you for shopping with us!`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm tap-bounce"
+              >
+                <MessageCircle className="w-3.5 h-3.5 fill-current" />
+                <span>Message on WhatsApp</span>
+              </a>
+
               <button
                 onClick={() => setSelectedOrder(null)}
                 className="bg-slate-100 text-slate-700 font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-slate-200"
