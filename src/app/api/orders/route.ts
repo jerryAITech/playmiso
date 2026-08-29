@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth';
+import { sendOrderConfirmationNotification } from '@/lib/email';
 
 export async function GET(request: NextRequest) {
   try {
@@ -143,6 +144,24 @@ export async function POST(request: NextRequest) {
 
       return order;
     });
+
+    // Trigger free email & notification dispatcher (non-blocking)
+    sendOrderConfirmationNotification({
+      orderNumber: createdOrder.orderNumber,
+      customerName: createdOrder.customerName,
+      email: createdOrder.email,
+      phone: createdOrder.phone,
+      totalAmount: createdOrder.totalAmount,
+      paymentMethod: createdOrder.paymentMethod,
+      items: items.map((i: any) => ({
+        title: i.title,
+        quantity: i.quantity,
+        price: i.price,
+      })),
+      address: createdOrder.address,
+      city: createdOrder.city,
+      postalCode: createdOrder.postalCode,
+    }).catch((err) => console.error('Notification error:', err));
 
     return NextResponse.json(createdOrder, { status: 201 });
   } catch (error: any) {

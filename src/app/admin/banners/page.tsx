@@ -12,6 +12,7 @@ import {
   Loader2,
   ArrowRight,
 } from 'lucide-react';
+import FileUpload from '@/components/FileUpload';
 
 const GRADIENT_PRESETS = [
   { label: 'Sunset Amber & Orange', value: 'from-amber-400 via-orange-300 to-toy-orange' },
@@ -280,11 +281,22 @@ export default function AdminBannersPage() {
               </div>
 
               <div>
+                <FileUpload
+                  label="Upload Banner Graphic (Local File / Phone)"
+                  acceptType="image"
+                  helperText="Upload wide hero visual (JPG, PNG, WebP)"
+                  onUploadSuccess={(url) => {
+                    if (url) setFormData((prev) => ({ ...prev, image: url }));
+                  }}
+                />
+              </div>
+
+              <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">Banner Image URL *</label>
                 <input
                   type="url"
                   required
-                  placeholder="https://images.unsplash.com/..."
+                  placeholder="https://images.unsplash.com/... or /uploads/..."
                   value={formData.image}
                   onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-toy-orange"

@@ -17,6 +17,7 @@ import {
   Wand2,
 } from 'lucide-react';
 import { CategoryType, ProductType } from '@/types';
+import FileUpload from '@/components/FileUpload';
 
 export default function EditToyProductPage({
   params,
@@ -352,6 +353,34 @@ export default function EditToyProductPage({
             <span>3. Product Images & Demo Video</span>
           </h3>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Image File Uploader */}
+            <FileUpload
+              label="Upload New Image (Local File / Phone)"
+              acceptType="image"
+              helperText="Upload JPG, PNG, or WebP photo of the toy"
+              onUploadSuccess={(url) => {
+                if (url) {
+                  setFormData((prev) => ({
+                    ...prev,
+                    images: prev.images ? `${prev.images}\n${url}` : url,
+                  }));
+                }
+              }}
+            />
+
+            {/* 30s Demo Video Uploader */}
+            <FileUpload
+              label="Upload Demo Video (Max 30s)"
+              acceptType="video"
+              maxVideoDurationSeconds={30}
+              helperText="Upload short clip (Trimmed to max 30s)"
+              onUploadSuccess={(url) => {
+                setFormData((prev) => ({ ...prev, videoUrl: url }));
+              }}
+            />
+          </div>
+
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1">
               Image URLs (1 URL per line or comma-separated) <span className="text-toy-red">*</span>
@@ -373,7 +402,7 @@ export default function EditToyProductPage({
               type="url"
               value={formData.videoUrl || ''}
               onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
-              placeholder="e.g. https://www.youtube.com/embed/dQw4w9WgXcQ or https://example.com/demo.mp4"
+              placeholder="e.g. https://www.youtube.com/embed/dQw4w9WgXcQ or /uploads/my-video.mp4"
               className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-toy-orange"
             />
             <p className="text-[11px] text-slate-500 mt-1">
