@@ -3,25 +3,25 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Grid, Search, Heart, ShoppingBag, Shield, User } from 'lucide-react';
+import { Home, Grid, Search, Heart, ShoppingBag, Shield, User, Sparkles } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAuth } from '@/lib/auth-context';
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
-  const { totalItems, wishlist, setIsCartOpen } = useCart();
+  const { totalItems, wishlist } = useCart();
   const { user } = useAuth();
 
-  // If in admin area, show admin bottom nav
+  // If in admin area, show admin bottom nav on mobile & tablet
   const isAdmin = pathname.startsWith('/admin');
 
   if (isAdmin) {
     return (
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800 px-4 py-2 flex items-center justify-around shadow-2xl">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-slate-800 px-4 py-2 flex items-center justify-around shadow-2xl">
         <Link
           href="/admin"
-          className={`flex flex-col items-center gap-1 text-[11px] font-medium ${
-            pathname === '/admin' ? 'text-toy-yellow font-bold' : 'text-slate-400'
+          className={`flex flex-col items-center gap-1 text-[11px] font-medium tap-bounce ${
+            pathname === '/admin' ? 'text-toy-yellow font-black' : 'text-slate-400'
           }`}
         >
           <Home className="w-5 h-5" />
@@ -29,8 +29,8 @@ export default function MobileBottomNav() {
         </Link>
         <Link
           href="/admin/products"
-          className={`flex flex-col items-center gap-1 text-[11px] font-medium ${
-            pathname.startsWith('/admin/products') ? 'text-toy-yellow font-bold' : 'text-slate-400'
+          className={`flex flex-col items-center gap-1 text-[11px] font-medium tap-bounce ${
+            pathname.startsWith('/admin/products') ? 'text-toy-yellow font-black' : 'text-slate-400'
           }`}
         >
           <Grid className="w-5 h-5" />
@@ -38,8 +38,8 @@ export default function MobileBottomNav() {
         </Link>
         <Link
           href="/admin/orders"
-          className={`flex flex-col items-center gap-1 text-[11px] font-medium ${
-            pathname.startsWith('/admin/orders') ? 'text-toy-yellow font-bold' : 'text-slate-400'
+          className={`flex flex-col items-center gap-1 text-[11px] font-medium tap-bounce ${
+            pathname.startsWith('/admin/orders') ? 'text-toy-yellow font-black' : 'text-slate-400'
           }`}
         >
           <ShoppingBag className="w-5 h-5" />
@@ -47,7 +47,7 @@ export default function MobileBottomNav() {
         </Link>
         <Link
           href="/"
-          className="flex flex-col items-center gap-1 text-[11px] font-medium text-toy-orange"
+          className="flex flex-col items-center gap-1 text-[11px] font-medium text-toy-orange tap-bounce"
         >
           <Shield className="w-5 h-5" />
           <span>Storefront</span>
@@ -56,92 +56,106 @@ export default function MobileBottomNav() {
     );
   }
 
+  const isHome = pathname === '/';
+  const isExplore = pathname.startsWith('/categories') || pathname.startsWith('/category') || pathname === '/shop';
+  const isBag = pathname === '/cart' || pathname === '/checkout';
+  const isWishlist = pathname === '/wishlist';
+  const isProfile = pathname === '/profile' || pathname === '/login' || pathname === '/signup';
+
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-slate-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] px-2 py-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))]">
-      <div className="flex items-center justify-around">
+    <nav
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-2xl border-t border-slate-200/80 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] select-none pb-[max(0.375rem,env(safe-area-inset-bottom))]"
+      aria-label="Mobile & Tablet Navigation"
+    >
+      <div className="max-w-lg mx-auto px-3 py-1.5 flex items-center justify-around">
         
-        {/* Home */}
+        {/* 1. Home Tab */}
         <Link
           href="/"
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-2xl tap-bounce transition-all ${
-            pathname === '/' ? 'text-toy-orange font-bold' : 'text-slate-500 hover:text-slate-800'
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl tap-bounce transition-all relative ${
+            isHome ? 'text-toy-orange font-black scale-105' : 'text-slate-500 hover:text-slate-900'
           }`}
         >
           <div className="relative">
-            <Home className="w-5 h-5" />
-            {pathname === '/' && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-toy-orange rounded-full" />
+            <Home className={`w-5 h-5 transition-transform ${isHome ? 'stroke-[2.5]' : 'stroke-[1.8]'}`} />
+            {isHome && (
+              <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-toy-orange rounded-full shadow-xs animate-scale-up" />
             )}
           </div>
           <span className="text-[10px] tracking-tight mt-1">Home</span>
         </Link>
 
-        {/* Categories */}
+        {/* 2. Explore / Categories Tab */}
         <Link
-          href="/categories"
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-2xl tap-bounce transition-all ${
-            pathname.startsWith('/categories') ? 'text-toy-orange font-bold' : 'text-slate-500 hover:text-slate-800'
+          href="/shop"
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl tap-bounce transition-all relative ${
+            isExplore ? 'text-toy-orange font-black scale-105' : 'text-slate-500 hover:text-slate-900'
           }`}
         >
           <div className="relative">
-            <Grid className="w-5 h-5" />
-            {pathname.startsWith('/categories') && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-toy-orange rounded-full" />
+            <Grid className={`w-5 h-5 transition-transform ${isExplore ? 'stroke-[2.5]' : 'stroke-[1.8]'}`} />
+            {isExplore && (
+              <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-toy-orange rounded-full shadow-xs animate-scale-up" />
             )}
           </div>
           <span className="text-[10px] tracking-tight mt-1">Explore</span>
         </Link>
 
-        {/* Bag */}
-        <button
-          onClick={() => setIsCartOpen(true)}
-          className="flex flex-col items-center justify-center py-1 px-2.5 rounded-2xl tap-bounce text-slate-700 hover:text-toy-orange relative"
-        >
-          <div className="relative">
-            <ShoppingBag className="w-5 h-5" />
-            {totalItems > 0 && (
-              <span className="absolute -top-1.5 -right-2 bg-toy-orange text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center animate-bounce-subtle">
-                {totalItems}
-              </span>
-            )}
-          </div>
-          <span className="text-[10px] tracking-tight font-medium mt-1">Bag</span>
-        </button>
-
-        {/* Wishlist */}
+        {/* 3. Shopping Bag Tab (Navigates directly to /cart) */}
         <Link
-          href="/wishlist"
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-2xl tap-bounce transition-all relative ${
-            pathname === '/wishlist' ? 'text-toy-pink font-bold' : 'text-slate-500 hover:text-slate-800'
+          href="/cart"
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl tap-bounce transition-all relative ${
+            isBag ? 'text-toy-orange font-black scale-105' : 'text-slate-500 hover:text-slate-900'
           }`}
         >
           <div className="relative">
-            <Heart className="w-5 h-5" />
+            <div className={`p-1 rounded-xl transition-all ${isBag ? 'bg-orange-50' : ''}`}>
+              <ShoppingBag className={`w-5 h-5 transition-transform ${isBag ? 'stroke-[2.5] text-toy-orange' : 'stroke-[1.8]'}`} />
+            </div>
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-1 bg-toy-orange text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs animate-bounce-subtle">
+                {totalItems}
+              </span>
+            )}
+            {isBag && (
+              <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-toy-orange rounded-full shadow-xs" />
+            )}
+          </div>
+          <span className="text-[10px] tracking-tight mt-0.5">Bag</span>
+        </Link>
+
+        {/* 4. Wishlist Tab */}
+        <Link
+          href="/wishlist"
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl tap-bounce transition-all relative ${
+            isWishlist ? 'text-toy-pink font-black scale-105' : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          <div className="relative">
+            <Heart className={`w-5 h-5 transition-transform ${isWishlist ? 'stroke-[2.5] fill-toy-pink text-toy-pink' : 'stroke-[1.8]'}`} />
             {wishlist.length > 0 && (
-              <span className="absolute -top-1.5 -right-2 bg-toy-pink text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1.5 bg-toy-pink text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                 {wishlist.length}
               </span>
             )}
-            {pathname === '/wishlist' && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-toy-pink rounded-full" />
+            {isWishlist && (
+              <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-toy-pink rounded-full shadow-xs" />
             )}
           </div>
           <span className="text-[10px] tracking-tight mt-1">Wishlist</span>
         </Link>
 
-        {/* Profile / Account */}
+        {/* 5. Profile / Account Tab */}
         <Link
           href={user ? '/profile' : '/login'}
-          className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-2xl tap-bounce transition-all ${
-            pathname === '/profile' || pathname === '/login' || pathname === '/signup'
-              ? 'text-toy-orange font-bold'
-              : 'text-slate-500 hover:text-slate-800'
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-2xl tap-bounce transition-all relative ${
+            isProfile ? 'text-toy-orange font-black scale-105' : 'text-slate-500 hover:text-slate-900'
           }`}
         >
           <div className="relative">
-            <User className="w-5 h-5" />
-            {(pathname === '/profile' || pathname === '/login') && (
-              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-toy-orange rounded-full" />
+            <User className={`w-5 h-5 transition-transform ${isProfile ? 'stroke-[2.5]' : 'stroke-[1.8]'}`} />
+            {isProfile && (
+              <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-toy-orange rounded-full shadow-xs animate-scale-up" />
             )}
           </div>
           <span className="text-[10px] tracking-tight mt-1">{user ? 'Profile' : 'Sign In'}</span>
