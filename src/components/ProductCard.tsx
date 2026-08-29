@@ -80,7 +80,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         ) : null}
 
         {/* Age Group Tag */}
-        <div className="absolute bottom-2.5 left-2.5 bg-slate-900/80 backdrop-blur-md text-white text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-lg shadow-sm">
+        <div className="absolute bottom-2.5 left-2.5 bg-white/95 backdrop-blur-md text-slate-800 text-[10px] sm:text-[11px] font-black px-2.5 py-0.5 rounded-lg shadow-sm border border-slate-200/80">
           {product.ageGroup}
         </div>
       </Link>
@@ -137,7 +137,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 e.preventDefault();
                 e.stopPropagation();
               }}
-              className="flex items-center bg-slate-900 text-white rounded-2xl p-0.5 shadow-toy-sm"
+              className="flex items-center bg-white text-slate-900 border-2 border-toy-orange rounded-2xl p-0.5 shadow-xs"
             >
               <button
                 type="button"
@@ -146,13 +146,13 @@ export default function ProductCard({ product }: ProductCardProps) {
                   e.stopPropagation();
                   updateQuantity(product.id, qtyInCart - 1);
                 }}
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center tap-bounce font-black text-xs transition-all cursor-pointer"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-orange-50 hover:bg-orange-100 text-toy-orange flex items-center justify-center tap-bounce font-black text-xs transition-all cursor-pointer"
                 aria-label="Decrease quantity"
               >
                 <Minus className="w-3.5 h-3.5 stroke-[3]" />
               </button>
 
-              <span className="w-5 sm:w-6 text-center text-xs sm:text-sm font-black text-white font-mono">
+              <span className="w-5 sm:w-6 text-center text-xs sm:text-sm font-black text-slate-900 font-mono">
                 {qtyInCart}
               </span>
 
@@ -164,7 +164,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                   updateQuantity(product.id, qtyInCart + 1);
                 }}
                 disabled={qtyInCart >= (product.stock || 99)}
-                className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-toy-orange hover:bg-toy-orange/90 text-white flex items-center justify-center tap-bounce font-black text-xs disabled:opacity-50 transition-all cursor-pointer"
+                className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-toy-orange hover:bg-orange-600 text-white flex items-center justify-center tap-bounce font-black text-xs disabled:opacity-50 transition-all cursor-pointer shadow-xs"
                 aria-label="Increase quantity"
               >
                 <Plus className="w-3.5 h-3.5 stroke-[3]" />

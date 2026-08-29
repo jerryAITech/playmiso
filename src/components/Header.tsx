@@ -63,9 +63,9 @@ export default function Header() {
             {user?.role === 'ADMIN' && (
               <Link
                 href="/admin"
-                className="hidden lg:flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-full transition-all"
+                className="hidden lg:flex items-center gap-1.5 bg-orange-100 hover:bg-orange-200 text-toy-orange text-xs font-bold px-3 py-1.5 rounded-full transition-all"
               >
-                <LayoutDashboard className="w-3.5 h-3.5 text-toy-yellow" />
+                <LayoutDashboard className="w-3.5 h-3.5 text-toy-orange" />
                 <span>Admin</span>
               </Link>
             )}
@@ -113,7 +113,7 @@ export default function Header() {
             >
               <ShoppingBag className="w-5 h-5 text-slate-900" />
               <span className="hidden sm:inline text-sm">Bag</span>
-              <span className="w-5 h-5 bg-slate-900 text-white text-xs font-black rounded-full flex items-center justify-center shadow-inner">
+              <span className="w-5 h-5 bg-toy-orange text-white text-xs font-black rounded-full flex items-center justify-center shadow-xs">
                 {totalItems}
               </span>
             </Link>

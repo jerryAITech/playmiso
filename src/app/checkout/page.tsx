@@ -423,9 +423,9 @@ export default function CheckoutPage() {
               </Link>
               <Link
                 href="/signup?redirect=/checkout"
-                className="w-full sm:flex-1 bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 tap-bounce text-xs transition-all"
+                className="w-full sm:flex-1 bg-white hover:bg-slate-50 text-slate-800 font-black py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 border-2 border-slate-200 shadow-xs tap-bounce text-xs transition-all"
               >
-                <UserPlus className="w-4 h-4" />
+                <UserPlus className="w-4 h-4 text-toy-orange" />
                 <span>Create Free Account</span>
               </Link>
             </div>

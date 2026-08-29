@@ -26,7 +26,7 @@ export default function AgeGroupFilter({ selectedAge }: AgeGroupFilterProps) {
           href="/shop"
           className={`px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold border transition-all shrink-0 tap-bounce ${
             !selectedAge
-              ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
+              ? 'bg-toy-orange text-white border-toy-orange shadow-toy-sm'
               : 'bg-white text-slate-700 border-slate-200 hover:border-slate-400'
           }`}
         >

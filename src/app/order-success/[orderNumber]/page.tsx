@@ -258,7 +258,7 @@ ${order.address}, ${order.city}, ${order.state} - ${order.postalCode}
         <div className="text-center pt-2">
           <Link
             href="/shop"
-            className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-black text-xs sm:text-sm py-4 px-8 rounded-2xl shadow-sm tap-bounce transition-all"
+            className="inline-flex items-center gap-2 bg-toy-orange hover:bg-orange-600 text-white font-black text-xs sm:text-sm py-4 px-8 rounded-2xl shadow-toy-colored tap-bounce transition-all"
           >
             <ShoppingBag className="w-4 h-4" />
             <span>Continue Shopping for Toys</span>

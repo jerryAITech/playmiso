@@ -142,14 +142,14 @@ export default function HeroBanner({ initialBanners }: HeroBannerProps) {
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <Link
                   href={activeBanner.linkUrl}
-                  className="bg-slate-900 hover:bg-slate-800 text-white font-black text-xs sm:text-sm px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl shadow-toy-sm flex items-center gap-2 tap-bounce transition-all"
+                  className="bg-toy-orange hover:bg-orange-600 text-white font-black text-xs sm:text-sm px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl shadow-toy-sm flex items-center gap-2 tap-bounce transition-all"
                 >
                   <span>{activeBanner.ctaText || 'Shop All Toys'}</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
                   href="/shop"
-                  className="bg-white/90 hover:bg-white text-slate-900 font-bold text-xs sm:text-sm px-5 sm:px-7 py-3.5 sm:py-4 rounded-2xl border border-white shadow-sm tap-bounce transition-all"
+                  className="bg-white hover:bg-slate-50 text-slate-900 font-bold text-xs sm:text-sm px-5 sm:px-7 py-3.5 sm:py-4 rounded-2xl border border-slate-200 shadow-sm tap-bounce transition-all"
                 >
                   Explore All Toys
                 </Link>
@@ -167,7 +167,7 @@ export default function HeroBanner({ initialBanners }: HeroBannerProps) {
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 40vw"
                 />
-                <div className="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[10px] sm:text-xs font-black px-2.5 py-1 rounded-xl">
+                <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-md text-slate-800 text-[10px] sm:text-xs font-black px-2.5 py-1 rounded-xl border border-slate-200/80 shadow-xs">
                   Cash on Delivery
                 </div>
               </div>
@@ -184,7 +184,7 @@ export default function HeroBanner({ initialBanners }: HeroBannerProps) {
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
                     className={`h-2 rounded-full transition-all ${
-                      currentSlide === idx ? 'w-8 bg-slate-900' : 'w-2 bg-slate-900/40 hover:bg-slate-900/70'
+                      currentSlide === idx ? 'w-8 bg-toy-orange' : 'w-2 bg-slate-400/60 hover:bg-slate-400'
                     }`}
                     aria-label={`Slide ${idx + 1}`}
                   />

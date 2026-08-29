@@ -262,7 +262,7 @@ export default function ParentReviewsSlider() {
             <button
               onClick={handleNext}
               aria-label="Next Review"
-              className="w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 text-white flex items-center justify-center shadow-md tap-bounce transition-colors"
+              className="w-9 h-9 rounded-xl bg-toy-orange hover:bg-orange-600 text-white flex items-center justify-center shadow-toy-sm tap-bounce transition-colors cursor-pointer"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

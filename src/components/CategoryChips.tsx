@@ -37,7 +37,7 @@ export default function CategoryChips({ categories, selectedSlug }: CategoryChip
                 : 'bg-slate-200'
             }`}
           >
-            <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-xl sm:text-2xl shadow-inner text-white font-bold">
+            <div className="w-full h-full rounded-full bg-gradient-to-tr from-amber-400 to-toy-orange flex items-center justify-center text-xl sm:text-2xl shadow-inner text-white font-bold">
               🎁
             </div>
           </div>

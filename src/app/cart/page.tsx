@@ -290,7 +290,7 @@ export default function CartPage() {
                       type="button"
                       disabled={couponLoading || !couponCode.trim()}
                       onClick={() => handleApplyCouponSubmit()}
-                      className="bg-slate-900 hover:bg-slate-800 text-white font-black text-xs px-5 py-3 rounded-2xl tap-bounce disabled:opacity-50 transition-all shadow-xs"
+                      className="bg-toy-orange hover:bg-orange-600 text-white font-black text-xs px-5 py-3 rounded-2xl tap-bounce disabled:opacity-50 transition-all shadow-xs cursor-pointer"
                     >
                       {couponLoading ? 'Checking...' : 'Apply'}
                     </button>

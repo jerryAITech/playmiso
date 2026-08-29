@@ -14,21 +14,21 @@ export default function Toast() {
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className="pointer-events-auto bg-slate-900/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl border border-slate-700/50 flex items-center justify-between gap-3 animate-in fade-in slide-in-from-top-3 duration-200"
+          className="pointer-events-auto bg-white/95 text-slate-900 backdrop-blur-md px-4 py-3.5 rounded-2xl shadow-xl border border-slate-200/90 flex items-center justify-between gap-3 animate-in fade-in slide-in-from-top-3 duration-200"
         >
-          <div className="flex items-center gap-2.5 text-xs font-semibold">
+          <div className="flex items-center gap-2.5 text-xs font-bold text-slate-800">
             {toast.type === 'warning' ? (
-              <AlertCircle className="w-4 h-4 text-toy-yellow shrink-0" />
+              <AlertCircle className="w-4 h-4 text-amber-500 shrink-0" />
             ) : toast.type === 'info' ? (
               <Info className="w-4 h-4 text-toy-blue shrink-0" />
             ) : (
-              <CheckCircle2 className="w-4 h-4 text-toy-green shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             )}
             <p className="leading-tight">{toast.message}</p>
           </div>
           <button
             onClick={() => removeToast(toast.id)}
-            className="text-slate-400 hover:text-white p-1"
+            className="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100 transition-colors"
             aria-label="Dismiss"
           >
             <X className="w-3.5 h-3.5" />

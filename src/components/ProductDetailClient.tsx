@@ -178,7 +178,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 className={`relative w-20 h-20 rounded-2xl overflow-hidden border-2 shrink-0 flex flex-col items-center justify-center gap-1 transition-all ${
                   activeMedia === 'video'
                     ? 'border-toy-orange bg-orange-50 ring-2 ring-toy-orange/30 scale-95 text-toy-orange'
-                    : 'border-slate-200 bg-slate-900 text-white hover:border-slate-400'
+                    : 'border-slate-200 bg-amber-50 text-slate-800 hover:border-toy-orange'
                 }`}
               >
                 <Play className="w-5 h-5 fill-current" />
@@ -302,9 +302,9 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 onClick={handleAddToCart}
-                className="w-full bg-white hover:bg-slate-50 text-slate-900 border-2 border-slate-900 font-black py-4 px-6 rounded-2xl flex items-center justify-center gap-2 tap-bounce text-sm shadow-xs transition-colors"
+                className="w-full bg-white hover:bg-slate-50 text-slate-800 border-2 border-slate-300 hover:border-slate-400 font-black py-4 px-6 rounded-2xl flex items-center justify-center gap-2 tap-bounce text-sm shadow-xs transition-colors cursor-pointer"
               >
-                <ShoppingBag className="w-4 h-4" />
+                <ShoppingBag className="w-4 h-4 text-toy-orange" />
                 <span>Add to Bag</span>
               </button>
 
