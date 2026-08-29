@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const user = await getCurrentUser();
     if (!user) {
       return NextResponse.json(
-        { error: 'Please log in to your ToyJoy account to place an order.' },
+        { error: 'Please log in to your PlayMiso account to place an order.' },
         { status: 401 }
       );
     }
