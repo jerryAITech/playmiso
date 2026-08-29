@@ -76,10 +76,24 @@ model Product {
   rating         Float       @default(4.8)
   reviewsCount   Int         @default(12)
   safetyInfo     String?     @default("100% Non-Toxic, BPA Free, Safe for Kids")
-  brand          String?     @default("ToyJoy")
+  brand          String?     @default("PlayMiso")
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
   orderItems     OrderItem[]
+  reviews        Review[]
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userName   String
+  rating     Int      @default(5)
+  title      String?
+  comment    String
+  isVerified Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Coupon {
