@@ -38,11 +38,22 @@ export async function PATCH(
 
     const validStatuses = ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
     if (!status || !validStatuses.includes(status)) {
-      return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid status value' }, { status: 400 });
+    }
+
+    // Find the order by id OR orderNumber first
+    const existingOrder = await prisma.order.findFirst({
+      where: {
+        OR: [{ id }, { orderNumber: id }],
+      },
+    });
+
+    if (!existingOrder) {
+      return NextResponse.json({ error: 'Order not found in database' }, { status: 404 });
     }
 
     const updated = await prisma.order.update({
-      where: { id },
+      where: { id: existingOrder.id },
       data: { status },
       include: { items: true },
     });
@@ -50,6 +61,6 @@ export async function PATCH(
     return NextResponse.json(updated);
   } catch (error: any) {
     console.error('Error updating order status:', error);
-    return NextResponse.json({ error: 'Failed to update order status' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed to update order status' }, { status: 500 });
   }
 }
