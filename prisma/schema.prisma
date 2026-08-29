@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @unique
+  password  String
+  phone     String?
+  role      String    @default("USER") // USER, ADMIN
+  addresses Address[]
+  orders    Order[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName   String
+  phone      String
+  street     String
+  city       String
+  state      String
+  postalCode String
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  icon        String?
+  image       String?
+  color       String?   @default("#FF7844")
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id             String      @id @default(cuid())
+  title          String
+  slug           String      @unique
+  description    String
+  price          Float
+  compareAtPrice Float?
+  discount       Int?        @default(0) // Percentage discount e.g. 20 for 20% OFF
+  images         String      // JSON array string of image URLs
+  videoUrl       String?     // Optional YouTube / MP4 product demo video
+  categoryId     String
+  category       Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  ageGroup       String      // "0-2 Years", "3-5 Years", "6-8 Years", "9+ Years"
+  stock          Int         @default(10)
+  isFeatured     Boolean     @default(false)
+  isTrending     Boolean     @default(false)
+  isBestseller   Boolean     @default(false)
+  
+  // Per-Product SEO & Google Search Fields
+  metaTitle       String?
+  metaDescription String?
+  metaKeywords    String?
+  canonicalUrl    String?
+  ogImage         String?
+
+  rating         Float       @default(4.8)
+  reviewsCount   Int         @default(12)
+  safetyInfo     String?     @default("100% Non-Toxic, BPA Free, Safe for Kids")
+  brand          String?     @default("ToyJoy")
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  orderItems     OrderItem[]
+}
+
+model Coupon {
+  id             String    @id @default(cuid())
+  code           String    @unique
+  description    String?
+  discountType   String    @default("PERCENTAGE") // PERCENTAGE, FIXED
+  discountValue  Float     // e.g. 10 for 10% or 100 for Flat ₹100
+  minOrderAmount Float     @default(0)
+  maxDiscount    Float?    // Cap for percentage discount
+  validUntil     DateTime?
+  isActive       Boolean   @default(true)
+  usageCount     Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Order {
+  id             String      @id @default(cuid())
+  orderNumber    String      @unique
+  userId         String?
+  user           User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  customerName   String
+  email          String
+  phone          String
+  address        String
+  city           String
+  state          String
+  postalCode     String
+  paymentMethod  String      @default("COD") // Cash On Delivery
+  subtotal       Float
+  shippingFee    Float       @default(0)
+  couponCode     String?
+  couponDiscount Float       @default(0)
+  totalAmount    Float
+  status         String      @default("PENDING") // PENDING, PROCESSING, SHIPPED, DELIVERED, CANCELLED
+  notes          String?
+  items          OrderItem[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  title     String
+  price     Float
+  quantity  Int      @default(1)
+  image     String?
+}
+
+model SeoSetting {
+  id              String   @id @default("global")
+  siteTitle       String   @default("PlayMiso | Discover the Magic of Play (Cash On Delivery)")
+  metaDescription String   @default("PlayMiso – Discover the Magic of Play. Shop safe, educational, STEM kits, cuddly plushies, RC cars, puzzles and action figures for kids of all ages with Cash on Delivery (COD) across India.")
+  keywords        String   @default("playmiso, toys online india, buy toys online, educational toys, stem toys, soft toys teddy bear, rc cars for kids, puzzles for children, cod toys shopping")
+  ogImage         String   @default("https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80")
+  twitterHandle   String   @default("@PlayMisoIndia")
+  updatedAt       DateTime @updatedAt
+}
+
+model Banner {
+  id          String   @id @default(cuid())
+  title       String
+  subtitle    String?
+  badgeText   String?  @default("MEGA TOY SALE • UP TO 40% OFF")
+  ctaText     String   @default("Shop Now")
+  linkUrl     String   @default("/shop")
+  image       String
+  bgGradient  String   @default("from-amber-400 via-orange-300 to-toy-orange")
+  productId   String?
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model StoreTheme {
+  id                   String   @id @default("global")
+  fontFamily           String   @default("Plus Jakarta Sans")
+  primaryColor         String   @default("#FF7844")
+  secondaryColor       String   @default("#2EC4B6")
+  buttonStyle          String   @default("bouncy-3d")
+  borderRadius         String   @default("rounded-3xl")
+  festiveMode          String   @default("NONE") // NONE, DIWALI, CHRISTMAS, NEW_YEAR, HOLI, CUSTOM
+  festiveBadgeText     String?  @default("Festive Mega Toy Sale • Up to 50% OFF")
+  festiveLogoEmoji     String?  @default("🪔")
+  festiveLogoUrl       String?
+  festiveBannerActive  Boolean  @default(true)
+  festiveRibbonBg      String   @default("from-amber-600 via-rose-600 to-purple-600")
+  updatedAt            DateTime @updatedAt
+}
