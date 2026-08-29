@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ShieldCheck, Truck, RotateCcw, Heart, Phone, Mail, MapPin } from 'lucide-react';
+import { STORE_CONFIG } from '@/lib/store-config';
 
 export default function Footer() {
   return (
@@ -108,15 +109,15 @@ export default function Footer() {
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-toy-yellow shrink-0" />
-                <span>+91 98765 43210 (Mon-Sat, 9AM-7PM)</span>
+                <span>{STORE_CONFIG.whatsappDisplay} ({STORE_CONFIG.operatingHours})</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-toy-orange shrink-0" />
-                <span>support@playmiso.in</span>
+                <span>{STORE_CONFIG.supportEmail}</span>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-toy-pink shrink-0 mt-0.5" />
-                <span>MG Road, Mumbai, Maharashtra 400001</span>
+                <span>{STORE_CONFIG.officeAddress}</span>
               </li>
             </ul>
 

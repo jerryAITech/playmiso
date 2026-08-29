@@ -16,6 +16,7 @@ import {
   ShoppingBag,
   MessageCircle,
 } from 'lucide-react';
+import { STORE_CONFIG } from '@/lib/store-config';
 
 export const revalidate = 0;
 
@@ -118,7 +119,7 @@ ${order.address}, ${order.city}, ${order.state} - ${order.postalCode}
             )}
 
             <a
-              href={`https://wa.me/919876543210?text=${encodeURIComponent(
+              href={`https://wa.me/${STORE_CONFIG.whatsappNumber}?text=${encodeURIComponent(
                 `Hi PlayMiso Support! 🎉 I just placed COD Order #${order.orderNumber} for ₹${order.totalAmount}. Please confirm my order dispatch to ${order.city}!`
               )}`}
               target="_blank"
