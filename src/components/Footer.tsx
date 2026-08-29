@@ -136,7 +136,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 gap-3 text-center sm:text-left">
           <p>© {new Date().getFullYear()} PlayMiso India Pvt Ltd. All rights reserved.</p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-wrap justify-center sm:justify-start">
             <Link href="/privacy-policy" className="hover:text-white transition-colors">
               Privacy Policy
             </Link>
@@ -145,6 +145,9 @@ export default function Footer() {
             </Link>
             <Link href="/shipping-returns" className="hover:text-white transition-colors">
               Shipping & Returns
+            </Link>
+            <Link href="/refund-policy" className="hover:text-white transition-colors">
+              Refund Policy
             </Link>
           </div>
         </div>
