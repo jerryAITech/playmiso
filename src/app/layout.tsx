@@ -27,9 +27,12 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: 'PlayMiso | Discover the Magic of Play (Cash On Delivery)',
+  title: {
+    default: 'PlayMiso – Discover the Magic of Play (Cash On Delivery Toys)',
+    template: '%s | PlayMiso',
+  },
   description:
-    'PlayMiso – Discover the Magic of Play. Shop safe, educational, STEM kits, cuddly plushies, RC cars, puzzles and action figures for kids of all ages with Cash on Delivery (COD) across India.',
+    'PlayMiso – Discover the Magic of Play. Shop safe, educational STEM kits, cuddly plushies, RC cars, puzzles and action figures for kids of all ages with Cash on Delivery (COD) across India.',
   keywords: [
     'playmiso',
     'toys online india',
@@ -42,18 +45,26 @@ export const metadata: Metadata = {
     'cod toys shopping',
   ],
   authors: [{ name: 'PlayMiso Store' }],
+  icons: {
+    icon: [
+      { url: '/icon' },
+    ],
+    apple: [
+      { url: '/apple-icon' },
+    ],
+  },
   openGraph: {
     title: 'PlayMiso – Discover the Magic of Play (Cash On Delivery)',
     description:
-      'PlayMiso – Discover the Magic of Play. Shop safe, high quality toys, STEM kits, RC cars & plushies with Cash on Delivery.',
-    url: 'https://playmiso.in',
+      'PlayMiso – Discover the Magic of Play. Shop safe, high quality toys, STEM kits, RC cars & plushies with Cash on Delivery across India.',
+    url: 'https://playmiso.vercel.app',
     siteName: 'PlayMiso',
     images: [
       {
         url: 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80',
         width: 1200,
         height: 630,
-        alt: 'ToyJoy Toys Store',
+        alt: 'PlayMiso Toys Store',
       },
     ],
     locale: 'en_IN',
