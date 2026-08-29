@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Plus_Jakarta_Sans, Outfit } from 'next/font/google';
+import { Inter, Poppins } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/lib/auth-context';
 import { CartProvider } from '@/lib/cart-context';
@@ -13,17 +13,17 @@ import InteractiveScreenCar from '@/components/InteractiveScreenCar';
 import FloatingParticles from '@/components/FloatingParticles';
 import FestiveBackgroundVectors from '@/components/FestiveBackgroundVectors';
 
-const plusJakartaSans = Plus_Jakarta_Sans({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-sans',
   display: 'swap',
 });
 
-const outfit = Outfit({
+const poppins = Poppins({
   subsets: ['latin'],
-  weight: ['600', '700', '800', '900'],
-  variable: '--font-outfit',
+  weight: ['500', '600', '700', '800', '900'],
+  variable: '--font-heading',
   display: 'swap',
 });
 
@@ -94,7 +94,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`h-full scroll-smooth ${plusJakartaSans.variable} ${outfit.variable}`}
+      className={`h-full scroll-smooth ${inter.variable} ${poppins.variable}`}
     >
       <body className="font-sans flex flex-col min-h-full antialiased selection:bg-toy-orange selection:text-white pb-16 md:pb-0">
         <ThemeProvider>

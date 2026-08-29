@@ -9,8 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-sans)', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
-        heading: ['var(--font-outfit)', 'Outfit', 'sans-serif'],
+        sans: ['var(--font-sans)', 'Inter', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-heading)', 'Poppins', 'sans-serif'],
+        poppins: ['var(--font-heading)', 'Poppins', 'sans-serif'],
+        inter: ['var(--font-sans)', 'Inter', 'sans-serif'],
       },
       colors: {
         toy: {
