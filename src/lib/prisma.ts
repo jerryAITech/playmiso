@@ -3,45 +3,45 @@ import fs from 'fs';
 import path from 'path';
 
 function getDatabaseUrl(): string {
-  // If an external cloud database is configured (e.g. Postgres / Turso)
-  if (process.env.DATABASE_URL && !process.env.DATABASE_URL.startsWith('file:')) {
-    return process.env.DATABASE_URL;
-  }
-
-  // On Vercel / Production Linux Serverless
+  // On Vercel / Linux Serverless Lambdas
   if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
     try {
       const tmpDbPath = '/tmp/dev.db';
 
-      // Always ensure /tmp/dev.db exists and is writable
       if (!fs.existsSync(tmpDbPath)) {
         const possibleSourcePaths = [
           path.join(process.cwd(), 'prisma', 'dev.db'),
           path.join(process.cwd(), 'dev.db'),
           path.resolve('./prisma/dev.db'),
           '/var/task/prisma/dev.db',
+          '/var/task/dev.db',
         ];
 
         for (const src of possibleSourcePaths) {
           if (fs.existsSync(src)) {
-            fs.copyFileSync(src, tmpDbPath);
             try {
+              fs.copyFileSync(src, tmpDbPath);
               fs.chmodSync(tmpDbPath, 0o666);
+              break;
             } catch {}
-            break;
           }
         }
       }
 
-      if (fs.existsSync(tmpDbPath)) {
-        return `file:${tmpDbPath}`;
-      }
+      return `file:${tmpDbPath}`;
     } catch (e) {
       console.error('Error preparing SQLite in /tmp:', e);
+      return 'file:/tmp/dev.db';
     }
   }
 
-  return process.env.DATABASE_URL || 'file:./dev.db';
+  // Local development
+  let url = process.env.DATABASE_URL || 'file:./prisma/dev.db';
+  if (!url.startsWith('file:')) {
+    url = `file:${url}`;
+  }
+
+  return url;
 }
 
 const activeDbUrl = getDatabaseUrl();
