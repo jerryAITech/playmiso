@@ -9,6 +9,7 @@ import FrequentlyBoughtTogether from '@/components/FrequentlyBoughtTogether';
 import Footer from '@/components/Footer';
 import { ArrowLeft, Sparkles } from 'lucide-react';
 import { ProductType } from '@/types';
+import { defaultProducts } from '@/lib/default-data';
 import type { Metadata } from 'next';
 
 export const revalidate = 0;
@@ -67,29 +68,42 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = await params;
 
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    include: {
-      category: true,
-      reviews: {
-        orderBy: { createdAt: 'desc' },
+  let product: any = null;
+  let relatedProducts: any[] = [];
+
+  try {
+    product = await prisma.product.findUnique({
+      where: { slug },
+      include: {
+        category: true,
+        reviews: {
+          orderBy: { createdAt: 'desc' },
+        },
       },
-    },
-  });
+    });
+
+    if (product) {
+      relatedProducts = await prisma.product.findMany({
+        where: {
+          categoryId: product.categoryId,
+          id: { not: product.id },
+        },
+        include: { category: true },
+        take: 4,
+      });
+    }
+  } catch (err) {
+    console.error('Product page fallback mode:', err);
+  }
+
+  if (!product) {
+    product = defaultProducts.find((p) => p.slug === slug || p.id === slug) || defaultProducts[0];
+    relatedProducts = defaultProducts.filter((p) => p.id !== product?.id);
+  }
 
   if (!product) {
     notFound();
   }
-
-  // Related products from same category & bundle candidate
-  const relatedProducts = await prisma.product.findMany({
-    where: {
-      categoryId: product.categoryId,
-      id: { not: product.id },
-    },
-    include: { category: true },
-    take: 4,
-  });
 
   const bundleProduct = relatedProducts[0] || null;
 

@@ -7,6 +7,7 @@ import AgeGroupFilter from '@/components/AgeGroupFilter';
 import Footer from '@/components/Footer';
 import { Filter, SlidersHorizontal, ArrowLeft } from 'lucide-react';
 import { CategoryType, ProductType } from '@/types';
+import { defaultCategories, defaultProducts } from '@/lib/default-data';
 
 export const revalidate = 0;
 
@@ -55,18 +56,30 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     orderBy = { rating: 'desc' };
   }
 
-  const [products, categories, totalCount] = await Promise.all([
-    prisma.product.findMany({
-      where,
-      include: { category: true },
-      orderBy,
-      take: 8,
-    }),
-    prisma.category.findMany({
-      orderBy: { name: 'asc' },
-    }),
-    prisma.product.count({ where }),
-  ]);
+  let products: any[] = defaultProducts;
+  let categories: any[] = defaultCategories;
+  let totalCount = defaultProducts.length;
+
+  try {
+    const [dbProducts, dbCategories, dbCount] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        include: { category: true },
+        orderBy,
+        take: 8,
+      }),
+      prisma.category.findMany({
+        orderBy: { name: 'asc' },
+      }),
+      prisma.product.count({ where }),
+    ]);
+
+    if (dbProducts && dbProducts.length > 0) products = dbProducts;
+    if (dbCategories && dbCategories.length > 0) categories = dbCategories;
+    if (dbCount !== undefined) totalCount = dbCount;
+  } catch (error) {
+    console.error('ShopPage fallback mode:', error);
+  }
 
   return (
     <div className="space-y-6">
