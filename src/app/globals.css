@@ -22,6 +22,35 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   letter-spacing: -0.02em;
 }
 
+/* Strict Maximum 16px Font Clamp across all Titles, Headings, and Display Text */
+h1, h2, h3, h4, h5, h6,
+.font-heading,
+.text-5xl, .text-4xl, .text-3xl, .text-2xl, .text-xl, .text-lg,
+[class*="sm:text-4xl"], [class*="sm:text-3xl"], [class*="sm:text-2xl"], [class*="md:text-4xl"], [class*="lg:text-4xl"] {
+  font-size: 16px !important;
+  line-height: 1.35 !important;
+}
+
+h1 {
+  font-size: 16px !important;
+  font-weight: 900 !important;
+}
+
+h2 {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+}
+
+h3 {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+
+h4, h5, h6 {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
 /* Hide Next.js development indicator */
 nextjs-portal, [data-nextjs-dev-indicator], [data-nextjs-toast] {
   display: none !important;
