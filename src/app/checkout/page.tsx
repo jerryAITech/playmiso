@@ -220,7 +220,7 @@ export default function CheckoutPage() {
         // Open Razorpay Checkout Modal
         if (typeof window !== 'undefined' && window.Razorpay) {
           const options = {
-            key: rpData.keyId || 'rzp_test_1DP5mmOlF5G5ag',
+            key: rpData.keyId || 'rzp_test_TViRmuXSIUV8fW',
             amount: rpData.amount,
             currency: 'INR',
             name: 'PlayMiso Toys',
